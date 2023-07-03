@@ -1,0 +1,43 @@
+---
+title: "ARIMA models"
+subtitle: "<span class='code'>13:30-14:15</span>"
+date: "2023-07-12"
+image: "jason-richard-Qsq9eW5C0TA-unsplash.jpg"
+---
+
+<!-- Materials will be distributed sooner to the event. -->
+
+```{=html}
+<embed src="../../materials/08_arima.pdf" type="application/pdf" width="750px" height="420px">
+```
+
+[View slides in full screen](../../materials/08_arima.pdf)
+
+## Lab sessions
+
+### Lab Session 16
+
+For the Australian job vacancies:
+
+```{r, eval = FALSE}
+skill_vacancies <- readxl::read_excel("data/Internet Vacancies, ANZSCO Skill Level, States and Territories - May 2024.xlsx", sheet = 2) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies",
+               names_transform = list(month = ~ yearmonth(as.Date(as.integer(.), origin = "1900-01-01")))) |> 
+  # Remove aggregate vacancies
+  filter(State != "AUST", Skill_level != 0) |> 
+  # Convert to tsibble
+  as_tsibble(key = c(State, Skill_level), index = month)
+```
+
+
+ * Fit a suitable ARIMA model (including possible transformation) for the data.
+ * Produce forecasts of your fitted model. Do the forecasts look reasonable?
+
+### Lab Session 17
+
+For the Australian tourism data (from `tourism`):
+
+ * Fit a suitable ARIMA model for all data.
+ * Produce forecasts of your fitted models.
+ * Check the forecasts for the "Snowy Mountains" and "Melbourne" regions. Do they look reasonable?

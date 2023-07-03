@@ -1,0 +1,31 @@
+---
+title: "Introduction to tsibbles"
+subtitle: "<span class='code'>09:30-10:30</span>"
+date: "2023-07-11"
+image: "aron-visuals-BXOXnQ26B7o-unsplash.jpg"
+---
+
+<!-- Materials will be distributed sooner to the event. -->
+
+```{=html}
+<embed src="../../materials/01_tsibble.pdf" type="application/pdf" width="750px" height="420px">
+```
+
+[View slides in full screen](../../materials/01_tsibble.pdf)
+
+## Lab sessions
+
+### Lab Session 1
+
+ 1. Use the `readabs` package to download and tidy the time series data from table `"19"` of the `"6202.0"` catalogue.
+ 2. Use `filter()` to remove time series relating to hours worked disaggregated by State/Territory. Also remove the aggregated time series (which specify `"Persons"`).
+ 3. Split the series column into two columns, `workload` and `sex` using the `separate()` function.
+ 4. Create a tsibble with the appropriate index and key variables, you will need to convert the date variable into a time variable with the appropriate granularity.
+ 5. Find which series contains the most worked hours.
+ 6. Create a new tsibble which aggregates over `sex`, and just has monthly worked hours by type.
+ 
+### Lab Session 2
+
+- Create time plots of the following four time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `Close` from `gafa_stock`, `Demand` from `vic_elec`.
+- Use `help()` to find out about the data in each series.
+- For the last plot, modify the axis labels and title.
