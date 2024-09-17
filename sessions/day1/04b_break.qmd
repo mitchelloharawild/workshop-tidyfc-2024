@@ -1,7 +1,7 @@
 ---
-title: "_Coffee Break_"
+title: "_Q&A Break_"
 subtitle: "<span class='code'>15:00-15:30</span>"
-date: "2023-07-11"
+date: "2024-10-01"
 image: "jeremy-yap-jn-HaGWe4yw-unsplash.jpg"
 ---
 

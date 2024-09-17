@@ -1,0 +1,14 @@
+---
+title: "Multivariate modelling"
+subtitle: "<span class='code'>15:30-17:00</span>"
+date: "2024-10-02"
+image: "john-barkiple-l090uFWoPaI-unsplash.jpg"
+---
+
+<!-- Materials will be distributed sooner to the event. -->
+
+```{=html}
+<embed src="../../materials/10_hierarchical.pdf" type="application/pdf" width="750px" height="420px">
+```
+
+[View slides in full screen](../../materials/11_multivariate.pdf)

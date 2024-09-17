@@ -1,7 +1,7 @@
 ---
-title: "_Coffee Break_"
+title: "_Q&A Break_"
 subtitle: "<span class='code'>15:00-15:30</span>"
-date: "2023-07-12"
+date: "2024-10-02"
 image: "emre-NZMeJsrMC8U-unsplash.jpg"
 ---
 

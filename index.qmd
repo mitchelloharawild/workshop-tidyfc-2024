@@ -55,14 +55,14 @@ Please bring your own laptop capable of running R.
 To be able to complete the exercises of this workshop, please install a suitable IDE (such as RStudio), a recent version of R (4.1+) and the following packages.
 
 -   **Time series packages and extensions**
-    -   fpp3, sugrrants
+    -   fpp3, sugrrants, MTS, urca
 -   **tidyverse packages and friends**
     -   tidyverse, readabs, GGally
 
 The following code will install the main packages needed for the workshop.
 
 ```r
-install.packages(c("tidyverse", "fpp3", "readabs", "GGally", "sugrrants"))
+install.packages(c("tidyverse", "fpp3", "MTS", "urca", "readabs", "GGally", "sugrrants"))
 ```
 
 Please have the required software installed and pre-work completed before attending the workshop.

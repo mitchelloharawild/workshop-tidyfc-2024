@@ -1,7 +1,7 @@
 ---
 title: "Seasonality and trends"
 subtitle: "<span class='code'>14:15-15:00</span>"
-date: "2023-07-11"
+date: "2024-10-01"
 image: "chris-lawton-5IHz5WhosQE-unsplash.jpg"
 ---
 

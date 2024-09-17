@@ -1,7 +1,7 @@
 ---
 title: "Dynamic regression"
 subtitle: "<span class='code'>14:15-15:00</span>"
-date: "2023-07-12"
+date: "2024-10-02"
 image: "zenad-nabil-NKK2nbMBRIc-unsplash.jpg"
 ---
 

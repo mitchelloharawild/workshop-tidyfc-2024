@@ -1,7 +1,7 @@
 ---
-title: "Coffee Break"
+title: "Q&A Break"
 subtitle: "<span class='code'>10:30-11:00</span>"
-date: "2023-07-11"
+date: "2024-10-01"
 image: "../images/tea.jpg"
 image-alt: "Tea"
 tbl-colwidths: [5,20,75]

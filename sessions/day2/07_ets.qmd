@@ -1,7 +1,7 @@
 ---
 title: "Exponential smoothing"
 subtitle: "<span class='code'>11:00-12:30</span>"
-date: "2023-07-12"
+date: "2024-10-02"
 image: "wil-stewart--m9PKhID7Nk-unsplash.jpg"
 ---
 

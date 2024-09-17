@@ -1,7 +1,7 @@
 ---
 title: "Background"
 subtitle: "<span class='code'>09:00-09:30</span>"
-date: "2023-07-11"
+date: "2024-10-01"
 image: "szucs-laszlo-0gdHUhYkXDc-unsplash.jpg"
 ---
 

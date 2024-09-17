@@ -61,18 +61,28 @@ website:
             href: sessions/day1/03_transformations.qmd
           - text: Seasonality and trends
             href: sessions/day1/04_decomposition.qmd
-          - text: Time series features
-            href: sessions/day1/05_features.qmd
-          - text: Introduction to forecasting
-            href: sessions/day2/06_forecasting.qmd
+          - text: Forecasting basics
+            href: sessions/day1/05_forecasting.qmd
+          - text: Accuracy evaluation
+            href: sessions/day2/06_accuracy.qmd
+            # Add bias and endogeneity
+            # Add segue of 'improving accuracy' (capturing more patterns)
           - text: Exponential smoothing
             href: sessions/day2/07_ets.qmd
+            # Keep as-is
           - text: ARIMA models
             href: sessions/day2/08_arima.qmd
+            # Keep mostly as-is, more attention on stationarity / ACF / PACF
           - text: Dynamic regression
             href: sessions/day2/09_dynreg.qmd
-          - text: Hierarchical forecasting
-            href: sessions/day2/10_hierarchical.qmd
+            # Emphasise incorporation of policy changes
+          - text: Multivariate modelling
+            href: sessions/day2/10_multivariate.qmd
+            # Mostly on multivariate modelling (VAR, VECM, VARIMA)
+            # Relate VAR and VECM (cointegration, conversion)
+            # Impulse response functions
+            # Estimation and identification problems
+            # Include some hierarchical ('teaser' at the end)
       - href: schedule.qmd
 
 format:
