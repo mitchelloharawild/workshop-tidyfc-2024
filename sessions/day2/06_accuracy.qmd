@@ -8,24 +8,21 @@ image: "balint-mendlik-4-ORHffEh3I-unsplash.jpg"
 <!-- Materials will be distributed sooner to the event. -->
 
 ```{=html}
-<embed src="../../materials/07_ets.pdf" type="application/pdf" width="750px" height="420px">
+<embed src="../../materials/12_accuracy.pdf" type="application/pdf" width="750px" height="420px">
 ```
 
 [View slides in full screen](../../materials/07_ets.pdf)
 
 ## Lab sessions
 
-### Lab Session 14
+### Lab Session 12
 
-Try forecasting the Chinese GDP from the `global_economy` data set using an ETS model.
+  * Compute RW w/ drift forecasts for total student enrolments in Australia.
+  * Test if the residuals are white noise. What do you conclude?
 
-Experiment with the various options in the `ETS()` function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.
+### Lab Session 13
 
-[Hint: use `h=20` when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]
-
-### Lab Session 15
-
-Find an ETS model for the Gas data from `aus_production` and forecast the next few years.
-
-  * Why is multiplicative seasonality necessary here?
-  * Experiment with making the trend damped. Does it improve the forecasts?
+ * Create a training set for Australian student enrolments by withholding the last four years as a test set.
+ * Fit all the appropriate benchmark methods to the training set and forecast the periods covered by the test set.
+ * Compute the accuracy of your forecasts. Which method does best?
+ * Repeat the exercise using the Australian takeaway food turnover data (`aus_retail`) with a test set of four years.

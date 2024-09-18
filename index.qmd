@@ -8,11 +8,11 @@ title: "Tidy time series & forecasting in R"
 
 It is common for organizations to collect huge amounts of data over time, and existing time series analysis tools are not always suitable to handle the scale, frequency and structure of the data collected. In this workshop, we will look at some packages and methods that have been developed to handle the analysis of large collections of time series.
 
-On day 1, we will look at the tsibble data structure for flexibly managing collections of related time series. We will look at how to do data wrangling, data visualizations, exploratory data analysis and produce forecasts with some simple techniques. Primary packages for day 1 will be [readabs](https://cran.r-project.org/package=readabs), [tsibble](https://cran.r-project.org/package=tsibble), [lubridate](https://cran.r-project.org/package=lubridate) and [feasts](https://cran.r-project.org/package=feasts) (along with the [tidyverse](http://tidyverse.org) of course).
+On day 1, we will look at the tsibble data structure for flexibly managing collections of related time series. We will look at how to do data wrangling, data visualizations, exploratory data analysis and produce forecasts with some simple techniques. We'll finish the day by looking at some simple forecasting models to better understand what is involved in forecasting. Primary packages for day 1 will be [readabs](https://cran.r-project.org/package=readabs), [tsibble](https://cran.r-project.org/package=tsibble), [lubridate](https://cran.r-project.org/package=lubridate) and [feasts](https://cran.r-project.org/package=feasts) (along with the [tidyverse](http://tidyverse.org) of course).
 
 Day 2 will be all about modelling and forecasting. We will look at some classical statistical models and how they are used for forecasting with the [fable](https://cran.r-project.org/package=fable) package. Building upon these statistical models, we will ensemble multiple models, incorporate policy into models and produce forecasts under various scenarios. Multivariate econometric modelling will allow us to investigate cointegration between measurements, understand the effect of economic shocks, and produce multivariate forecasts. Finally, we will briefly look at forecast reconciliation, allowing many time series to be forecast in a relatively short time while accounting for constraints on how the series are structurally related.
 
-This workshop will run online and in-person on-site at the Department of Education in the second half of 2024.
+This workshop will run online and in-person for the Australian Department of Education.
 
 ## Learning objectives
 

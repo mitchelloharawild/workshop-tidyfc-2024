@@ -27,4 +27,473 @@ format:
 source("setup.R")
 ```
 
-# ...
+# Multivariate modelling
+
+## Multivariate modelling
+
+What is it?
+
+* Multiple models?
+* Multiple time series?
+* Multiple variables!
+
+## Multivariate modelling
+
+Why it is useful?
+
+* Introduce the importance of modelling multiple time series together.
+
+* Real-world applications (e.g., macroeconomic variables, financial data).
+
+# Vector Autoregression (VAR)
+
+## Autoregression (AR)
+
+The AR($p$) model for a **univariate** time series $y_t$ is:
+
+$$
+  y_t = a_1 y_{t-1} + a_2 y_{t-2} + \dots + a_p y_{t-p} + \varepsilon_t
+$$
+
+where:
+
+- $y_t$ is the time series at time $t$,
+- $a_1, a_2, \dots, a_p$ are the coefficients for the autoregressive lags,
+- $p$ is the order of the AR process,
+- $\varepsilon_t$ is the white noise error term at time $t$.
+
+## Cross correlations
+
+The Cross-Correlation Function (CCF) measures the correlation between two time series at different time lags.
+
+The CCF provides insight into how variables influence each other over time, suggesting the appropriate number of lags for the VAR model.
+
+## Endogeneity
+
+Endogeneity occurs when an explanatory variable is correlated with the error term in a model.
+
+Endogeneity 
+
+* Leads to biased and inconsistent estimates in time series models.
+* Compromises the validity of hypothesis testing and forecasting.
+
+Common Causes of Endogeneity in Time Series:
+
+* Simultaneity: Variables mutually affect each other (e.g., supply and demand).
+* Omitted Variables: Missing relevant factors that influence both the dependent variable and the regressors.
+* Measurement Errors: Errors in measuring explanatory variables lead to endogeneity.
+
+## Vector Autoregression (VAR)
+
+The general form of a VAR model with $k$ time series variables $Y_t = (y_{1t}, y_{2t}, \dots, y_{kt})'$ is:
+
+$$
+  Y_t = A_1 Y_{t-1} + A_2 Y_{t-2} + \dots + A_p Y_{t-p} + \varepsilon_t
+$$
+
+where:
+
+- $Y_t$ is a vector of endogenous variables at time $t$,
+- $A_i$ are coefficient matrices (each of size $k \times k$),
+- $p$ is the lag order,
+- $\varepsilon_t$ is a vector of error terms (with mean zero and covariance matrix $\Sigma$).
+
+
+## Vector Autoregression (VAR)
+
+In matrix form, the VAR($p$) model is represented as:
+  
+$$
+  \Phi(L) Y_t = \varepsilon_t
+$$
+
+where:
+
+- $Y_t$ is a $k \times 1$ vector of endogenous variables $Y_t = \begin{pmatrix} y_{1t} \\ y_{2t} \\ \vdots \\ y_{kt} \end{pmatrix}$,
+- $\Phi(L)$ is a matrix polynomial of AR coefficients in the lag operator $L$
+- $\varepsilon_t$ is a $k \times 1$ vector of error terms (white noise), $\varepsilon_t = \begin{pmatrix} \varepsilon_{1t} \\ \varepsilon_{2t} \\ \vdots \\ \varepsilon_{kt} \end{pmatrix}$.
+
+<!-- About 20 minutes -->
+
+## Vector Autoregression (VAR)
+
+TODO:
+
+* Multivariate forecasting:
+  * Demonstrate model estimation
+  * Show forecasts
+* Granger Causality:
+  * Concept and how it's tested in VAR.
+  * Provide an example of testing Granger causality between two series.
+* Impulse Response Functions (IRFs):
+  * Explain the concept of IRFs and how they reveal the response of one variable to shocks in another.
+  * Show an example using IRFs in a VAR setting.
+
+# Vector Error Correction Models (VECM)
+
+## Vector Error Correction Models (VECM)
+
+The VECM is used when variables are cointegrated. The form of a VECM for $Y_t$ is:
+
+$$
+  \Delta Y_t = \Pi Y_{t-1} + \sum_{i=1}^{p-1} \Gamma_i \Delta Y_{t-i} + \varepsilon_t
+$$
+
+where:
+
+- $\Delta Y_t = Y_t - Y_{t-1}$ is the first difference of $Y_t$,
+- $\Pi$ is the cointegration matrix ($\Pi = \alpha \beta'$, where $\alpha$ are adjustment coefficients and $\beta$ are cointegration vectors),
+- $\Gamma_i$ are short-run adjustment coefficients,
+- $\varepsilon_t$ is the error term.
+
+
+## Cointegration
+
+Definition: Cointegration occurs when two or more non-stationary time series, each integrated of the same order, are linked by a long-term equilibrium relationship.
+
+For example: If $x$ and $y$ are non-stationary, and a linear combination of them is stationary, then $x$ and $y$ are cointegrated.
+
+## The Johansen test
+
+The Johansen test helps to determine how many long-term equilibrium relationships exist between the variables, guiding model specification.
+
+
+## Estimating a VECM
+
+TODO:
+
+* Explain the link between cointegration and VECM, and between VECM and VAR.
+* Discuss long-term equilibrium relationships and short-term dynamics.
+* Provide an example of a VECM model and interpretation of error correction terms.
+
+# VARIMA Models
+
+## VARIMA Models
+
+The VARIMA model extends an ARIMA model to multiple time series. 
+
+It combines autoregression (AR), differencing (I), and moving average (MA) components:
+  
+$$
+  \Phi(L) \Delta^d Y_t = \Theta(L) \varepsilon_t
+$$
+
+where:
+
+- $\Phi(L)$ is the matrix polynomial in the lag operator $L$ for the AR part,
+- $\Delta^d Y_t$ is the differenced series ($d$ is the order of integration),
+- $\Theta(L)$ is the matrix polynomial in the lag operator $L$ for the MA part,
+- $\varepsilon_t$ is the error term. 
+
+In the VARIMA model, both autoregressive and moving average terms are allowed across multiple time series.
+
+## VARIMA Models
+
+TODO:
+
+* Introduction to VARIMA:
+   * Discuss the role of differencing for non-stationary data.
+* Modelling Process:
+  * Model selection for VARIMA
+  * Briefly compare it to VAR and VECM in terms of applicability.
+
+
+# Forecast reconciliation
+
+# Hierarchical and grouped time series
+
+## Australian tourism
+\fontsize{9}{10}\sf
+
+```{r tourism}
+tourism
+```
+
+\begin{textblock}{7}(8.5,1.5)\fontsize{10}{11}\sf
+\begin{block}{}
+  \begin{itemize}\itemsep=0cm\parskip=0cm
+    \item Quarterly data on visitor nights, 1998:Q1 -- 2017:Q4
+    \item From: \textit{National Visitor Survey}, based on annual interviews of 120,000 Australians aged 15+, collected by Tourism Research Australia.
+    \item Split by 8 states and 76 regions
+    \item Split by purpose of travel
+      \begin{itemize}\fontsize{10}{11}\sf
+        \item Holiday
+        \item Visiting friends and relatives (VFR)
+        \item Business
+        \item Other
+      \end{itemize}
+    \item 304 bottom-level series
+  \end{itemize}
+\end{block}
+\end{textblock}
+
+## Hierarchical time series
+\fontsize{13}{14}\sf
+
+A \alert{\textbf{hierarchical time series}} is a collection of several time series that are linked together in a hierarchical structure.
+
+\begin{minipage}{9.6cm}
+\begin{block}{}
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15]
+\tikzstyle[level distance=.1cm]
+\tikzstyle[sibling distance=7cm]
+\tikzstyle{level 1}=[sibling distance=33mm,set style={{every node}+=[fill=blue!15]}]
+\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+   child {node {AA}}
+   child {node {AB}}
+   child {node {AC}}
+ }
+ child {node {B}
+   child {node {BA}}
+   child {node {BB}}
+   child {node {BC}}
+ }
+ child {node {C}
+   child {node {CA}}
+   child {node {CB}}
+   child {node {CC}}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+
+\pause\alert{Examples}\vspace*{-0.2cm}
+
+ * PBS sales by ATC groups
+ * Tourism demand by states, regions
+
+## Grouped time series
+\fontsize{13}{14}\sf
+
+A \alert{\textbf{grouped time series}} is a collection of time series that can be grouped together in a number of non-hierarchical ways.
+
+\begin{minipage}{9.2cm}
+\begin{block}{}
+\begin{tikzpicture}[level distance=1.5cm]
+\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,outer sep=0pt, fill=red!15]
+\tikzstyle{level 1}=[sibling distance=23mm,set style={{every node}+=[fill=blue!15]},level distance=1cm]
+\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}, level distance=0.9cm]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+   child {node {AX}}
+   child {node {AY}}
+ }
+ child {node {B}
+   child {node {BX}}
+   child {node {BY}}
+ };
+\end{tikzpicture}\hspace*{1cm}
+\begin{tikzpicture}[level distance=1.5cm]
+\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,outer sep=0pt, fill=red!15]
+\tikzstyle{level 1}=[sibling distance=23mm,set style={{every node}+=[fill=blue!15]},level distance=1cm]
+\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}, level distance=0.9cm]
+\node{Total}[edge from parent fork down]
+ child {node {X}
+   child {node {AX}}
+   child {node {BX}}
+ }
+ child {node {Y}
+   child {node {AY}}
+   child {node {BY}}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+
+\pause\alert{Examples}
+
+ * Tourism by state and purpose of travel
+ * Retail sales by product groups/sub groups, and by countries/regions
+
+## Creating aggregates
+\fontsize{8}{8}\sf
+
+```{r tourism_aggregate}
+tourism |>
+  aggregate_key(Purpose * (State / Region), Trips = sum(Trips)) |>
+  filter(Quarter == yearquarter("1998 Q1")) |>
+  print(n = 15)
+```
+
+## Creating aggregates
+\fontsize{13}{15}\sf
+
+ * Similar to `summarise()` but using the key structure
+ * A grouped structure is specified using `grp1 * grp2`
+ * A nested structure is specified via `parent / child`.
+ * Groups and nesting can be mixed:
+
+    ```r
+    (country/region/city) * (brand/product)
+    ```
+
+ * All possible aggregates are produced.
+ * These are useful when forecasting at different levels of aggregation.
+
+## Forecast reconciliation: the problem
+\fontsize{13}{14}\sf
+
+\begin{alertblock}{}
+\begin{enumerate}\tightlist
+ \item How to forecast time series at all nodes such that the forecasts add up in the same way as the original data?
+ \item Can we exploit relationships between the series to improve the forecasts?
+\end{enumerate}
+\end{alertblock}\pause
+
+### Forecast reconciliation: the solution
+
+1. Forecast all series at all levels of aggregation using an automatic forecasting algorithm.\newline (e.g., `ETS`, `ARIMA`, ...)
+2. Reconcile the resulting forecasts so they add up correctly using least squares optimization (i.e., find closest reconciled forecasts to the original forecasts).
+3. This is available using `reconcile()`.
+
+## Forecast reconciliation
+\fontsize{9}{10}\sf
+
+```{r tourismets_reconciled, message=FALSE}
+tourism |>
+  aggregate_key(Purpose * (State / Region), Trips = sum(Trips)) |>
+  model(ets = ETS(Trips)) |>
+  reconcile(ets_adjusted = min_trace(ets)) |>
+  forecast(h = 2)
+```
+
+## Hierarchical and grouped time series
+
+Every collection of time series with aggregation constraints can be written as
+\begin{block}{}
+\centerline{$\by_{t}=\bS\bm{b}_{t}$}
+\end{block}
+where
+
+ * $\by_t$ is a vector of all series at time $t$
+ * $\bm{b}_t$ is a vector of the most disaggregated series at time $t$
+ * $\bS$ is a ``summing matrix'' containing the aggregation constraints.
+
+## Hierarchical time series
+
+\begin{minipage}{4cm}\vspace*{0.2cm}
+\begin{block}{}\centering
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.3cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+ }
+ child {node {B}
+ }
+ child {node {C}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+
+\only<2->{\begin{textblock}{6.3}(6,1)\small
+\begin{itemize}\itemsep=0cm\parskip=0cm
+\item[$ y_{t}: $] observed aggregate of all series at time
+$t$.
+\item[$ y_{X,t}: $] observation on series $X$ at time $t$.
+\item[$ \bm{b}_{t}: $] vector of all series at bottom level
+in time $t$.
+\end{itemize}
+\end{textblock}}\vspace*{0.6cm}
+\only<3->{
+$\bY_{t}= \begin{pmatrix}
+  y_{t}\\
+  y_{A,t}\\
+  y_{B,t}\\
+  y_{C,t}
+  \end{pmatrix} = \only<3>{\hspace*{0.01cm}\begin{pmatrix}
+                1 & 1 & 1 \\
+                1 & 0 & 0 \\
+                0 & 1 & 0\\
+                0 & 0 & 1
+                \end{pmatrix}}\only<4->{{\color{blue}\underbrace{\begin{pmatrix}
+                1 & 1 & 1 \\
+                1 & 0 & 0 \\
+                0 & 1 & 0\\
+                0 & 0 & 1
+                \end{pmatrix}}_{\bS}}}\only<3>{\hspace*{0.08cm}}\only<3>{\hspace*{-0.1cm}\begin{pmatrix}y_{A,t}\\y_{B,t}\\y_{C,t}\end{pmatrix}}\rule{0cm}{1.6cm}
+                \only<4->{\hspace*{0.08cm}{\color{red}\underbrace{\begin{pmatrix}y_{A,t}\\y_{B,t}\\y_{C,t}\end{pmatrix}}_{\bm{b}_{t}}}}$}
+
+\vspace*{-0.8cm}
+
+\only<4>{\hspace*{8cm}\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
+
+\vspace*{10cm}
+
+## Forecasting notation
+
+Let $\hat{\by}_n(h)$ be vector of initial $h$-step forecasts, made at time $n$, stacked in same order as $\by_t$. \pause\newline  (In general, they will not ``add up''.)\pause
+
+\begin{block}{}
+Reconciled forecasts must be of the form:
+\centerline{$\tilde{\by}_{n}(h)=\bS\bm{G}\hat{\by}_{n}(h)$}
+for some matrix $\bm{G}$.
+\end{block}\pause
+
+ * $\bm{G}$ extracts and combines base forecasts $\hat{\by}_{n}(h)$ to get bottom-level forecasts.
+ * $\bS$ adds them up
+
+# Optimal combination forecasts
+
+## Optimal combination forecasts
+\fontsize{13}{14}\sf
+
+\begin{alertblock}{Main result}
+The best (minimum sum of variances) unbiased forecasts are obtained when
+$\bm{G} = (\bS'\bW^{-1}_{h}\bS)^{-1}\bS'\bW^{-1}_{h}$,
+where $\bW_h$ is the $h$-step base forecast error covariance matrix.
+\end{alertblock}
+
+\pause
+
+\begin{block}{}
+\centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{n}(h)}
+=\bS(\bS'\bW^{-1}_{h}\bS)^{-1}\bS'\bW^{-1}_{h}\textcolor{blue}{\hat{\by}_{n}(h)}$}
+\end{block}\vspace*{-0.2cm}
+
+\alert{\textbf{Problem:}} $\bW_h$ hard to estimate, especially for $h>1$.
+\vspace*{-0.1cm}
+
+\alert{Solutions:}\vspace*{-0.4cm}
+
+ * Ignore $\bW_h$ (OLS) [`min_trace(method='ols')`]
+ * Assume $\bW_h = k_h\bW_1$ is diagonal (WLS) [`min_trace(method='wls')`]
+ * Assume $\bW_h = k_h\bW_1$ and estimate it (GLS) [`min_trace(method='shrink')` (the default)]
+
+## Features
+\fontsize{15}{17}\sf
+
+ * Covariates can be included in initial forecasts.
+ * Adjustments can be made to initial forecasts at any level.
+ * Very simple and flexible method. Can work with *any* hierarchical or grouped time series.
+ * Conceptually easy to implement: regression of base forecasts on structure matrix.
+
+## Example: Australian tourism
+\fontsize{12}{13}\sf
+
+```{r fctourism}
+tourism_agg <- tourism |>
+  aggregate_key(Purpose * (State / Region),
+    Trips = sum(Trips)
+  )
+fc <- tourism_agg |>
+  filter_index(. ~ "2015 Q4") |>
+  model(ets = ETS(Trips)) |>
+  reconcile(ets_adjusted = min_trace(ets)) |>
+  forecast(h = "2 years")
+```
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism2, dependson='fctourism'}
+fc |>
+  filter(is_aggregated(Purpose) & is_aggregated(State)) |>
+  autoplot(tourism_agg, level = 95)
+```
