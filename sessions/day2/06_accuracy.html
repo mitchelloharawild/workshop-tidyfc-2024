@@ -186,8 +186,8 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#lab-sessions" id="toc-lab-sessions" class="nav-link active" data-scroll-target="#lab-sessions">Lab sessions</a>
   <ul class="collapse">
-  <li><a href="#lab-session-14" id="toc-lab-session-14" class="nav-link" data-scroll-target="#lab-session-14">Lab Session 14</a></li>
-  <li><a href="#lab-session-15" id="toc-lab-session-15" class="nav-link" data-scroll-target="#lab-session-15">Lab Session 15</a></li>
+  <li><a href="#lab-session-12" id="toc-lab-session-12" class="nav-link" data-scroll-target="#lab-session-12">Lab Session 12</a></li>
+  <li><a href="#lab-session-13" id="toc-lab-session-13" class="nav-link" data-scroll-target="#lab-session-13">Lab Session 13</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/edit/main/sessions/day2/06_accuracy.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -222,22 +222,24 @@ ul.task-list li input[type="checkbox"] {
 
 
 <!-- Materials will be distributed sooner to the event. -->
-<embed src="../../materials/07_ets.pdf" type="application/pdf" width="750px" height="420px">
+<embed src="../../materials/12_accuracy.pdf" type="application/pdf" width="750px" height="420px">
 <p><a href="../../materials/07_ets.pdf">View slides in full screen</a></p>
 <section id="lab-sessions" class="level2">
 <h2 class="anchored" data-anchor-id="lab-sessions">Lab sessions</h2>
-<section id="lab-session-14" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-14">Lab Session 14</h3>
-<p>Try forecasting the Chinese GDP from the <code>global_economy</code> data set using an ETS model.</p>
-<p>Experiment with the various options in the <code>ETS()</code> function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.</p>
-<p>[Hint: use <code>h=20</code> when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]</p>
-</section>
-<section id="lab-session-15" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-15">Lab Session 15</h3>
-<p>Find an ETS model for the Gas data from <code>aus_production</code> and forecast the next few years.</p>
+<section id="lab-session-12" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-12">Lab Session 12</h3>
 <ul>
-<li>Why is multiplicative seasonality necessary here?</li>
-<li>Experiment with making the trend damped. Does it improve the forecasts?</li>
+<li>Compute RW w/ drift forecasts for total student enrolments in Australia.</li>
+<li>Test if the residuals are white noise. What do you conclude?</li>
+</ul>
+</section>
+<section id="lab-session-13" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-13">Lab Session 13</h3>
+<ul>
+<li>Create a training set for Australian student enrolments by withholding the last four years as a test set.</li>
+<li>Fit all the appropriate benchmark methods to the training set and forecast the periods covered by the test set.</li>
+<li>Compute the accuracy of your forecasts. Which method does best?</li>
+<li>Repeat the exercise using the Australian takeaway food turnover data (<code>aus_retail</code>) with a test set of four years.</li>
 </ul>
 
 
