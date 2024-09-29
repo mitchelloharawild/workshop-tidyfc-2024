@@ -3,11 +3,11 @@ library(dplyr)
 library(tsibble)
 
 students <- read_excel(
-  "data-raw/schools/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx",
+  "data-raw/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx",
   sheet = 3, skip = 4
 ) |> 
   # Group by Year and all the character variables
-  group_by(Year, across(where(is.character), identity)) |> 
+  group_by(Year, across(where(is.character), ~ substring(., 3))) |> 
   # Add up the duplicate rows
   summarise(across(ends_with("count"), sum), .groups = "drop") |> 
   # Convert to a tsibble
@@ -16,4 +16,4 @@ students <- read_excel(
     index = Year
   )
 
-readr::write_rds(students, "exercises/data/students.rds")
+readr::write_rds(students, "data/students.rds")

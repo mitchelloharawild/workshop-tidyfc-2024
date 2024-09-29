@@ -8,4 +8,4 @@ payroll_education <- read_payrolls("subindustry_jobs") |>
   transmute(Industry = industry_subdivision, Week = yearweek(date), Jobs = value) |> 
   # Convert to tsibble
   as_tsibble(index = Week, key = Industry)
-readr::write_rds(payroll_education, "exercises/data/payroll_education.rds")
+readr::write_rds(payroll_education, "data/payroll_education.rds")
