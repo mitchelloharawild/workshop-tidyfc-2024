@@ -302,6 +302,24 @@ $e_{T+h} =$  & $y_{T+h} - \pred{y}{T+h}{T}$
 
 \begin{block}{}\vspace*{-0.7cm}
 \begin{align*}
+\text{ME} &= \text{mean}(e_{T+h})
+\end{align*}\vspace*{-0.9cm}
+\end{block}
+
+* Mean error is an indicator of bias.
+* On training accuracy, it is expected to be 0.
+
+
+## Measures of forecast accuracy
+
+\begin{tabular}{rl}
+$y_{T+h}=$ & $(T+h)$th observation, $h=1,\dots,H$ \\
+$\pred{y}{T+h}{T}=$ & its forecast based on data up to time $T$. \\
+$e_{T+h} =$  & $y_{T+h} - \pred{y}{T+h}{T}$
+\end{tabular}
+
+\begin{block}{}\vspace*{-0.7cm}
+\begin{align*}
 \text{MAE} &= \text{mean}(|e_{T+h}|) \\[-0.2cm]
 \text{MSE} &= \text{mean}(e_{T+h}^2) \qquad
 &&\text{RMSE} &= \sqrt{\text{mean}(e_{T+h}^2)} \\[-0.1cm]
