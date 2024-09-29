@@ -27,6 +27,8 @@ occupation_vacancies <- readxl::read_excel("data/Internet Vacancies, ANZSCO2 Occ
   # Convert to tsibble
   as_tsibble(key = c(Title_CAT, Title), index = month)
 
+
+
 occupation_vacancies |> 
   group_by(Title_CAT) |> 
   summarise(vacancies = sum(vacancies)) |> 
@@ -60,3 +62,29 @@ readxl::read_excel("data/Internet Vacancies, ANZSCO Skill Level, States and Terr
   # Convert to tsibble
   as_tsibble(key = c(State, Skill_level), index = month) |> 
   autoplot(vacancies)
+
+
+
+anzco4_occupations <- readxl::read_excel("data/Internet Vacancies, ANZSCO4 Occupations, States and Territories - August 2024.xlsx", sheet = 2) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies",
+               names_transform = list(month = ~ yearmonth(as.Date(as.integer(.), origin = "1900-01-01"))),
+               values_transform = ~ parse_number(., na = "."))
+
+ANZSCO4_edu <- c(2411, 2412, 2413, 2414, 2415, 2421, 2422, 2491, 2492, 2493)
+anzco4_occupations |> 
+  filter(ANZSCO_CODE %in% !!ANZSCO4_edu, state == "AUST") |> 
+  as_tsibble(key = c(ANZSCO_TITLE, state), index = month) |> 
+  autoplot(vacancies)
+
+occupation_vacancies <- readxl::read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - May 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies",
+               names_transform = list(month = ~ yearmonth(as.Date(as.integer(.), origin = "1900-01-01")))) |> 
+  # Remove aggregate vacancies
+  filter(nchar(ANZSCO_CODE) > 1, State == "AUST") |> 
+  mutate(ANZSCO_CODE_CAT = substr(ANZSCO_CODE, 1, 1)) |> 
+  left_join(anzco_occupations, by = c("ANZSCO_CODE_CAT" = "ANZSCO_CODE"), suffix = c("", "_CAT")) |> 
+  # Convert to tsibble
+  as_tsibble(key = c(Title_CAT, Title), index = month)
+
