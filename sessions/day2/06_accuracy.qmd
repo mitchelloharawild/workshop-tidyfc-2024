@@ -15,14 +15,13 @@ image: "balint-mendlik-4-ORHffEh3I-unsplash.jpg"
 
 ## Lab sessions
 
-### Lab Session 12
+### Lab Session 10
 
-  * Compute RW w/ drift forecasts for total student enrolments in Australia.
+  * Use RW w/ drift to model total student enrolments in Australia (`students`).
   * Test if the residuals are white noise. What do you conclude?
 
-### Lab Session 13
+### Lab Session 11
 
- * Create a training set for Australian student enrolments by withholding the last four years as a test set.
+ * Create a training set for employed Australian students (`student_labour`) by withholding the last four years as a test set.
  * Fit all the appropriate benchmark methods to the training set and forecast the periods covered by the test set.
  * Compute the accuracy of your forecasts. Which method does best?
- * Repeat the exercise using the Australian takeaway food turnover data (`aus_retail`) with a test set of four years.

@@ -66,67 +66,53 @@ melsyd <- tsibbledata::ansett |>
   3. $\{e_t\}$ have constant variance.
   4. $\{e_t\}$ are normally distributed.
 
-## Facebook closing stock price
+## Total in-school staff
 \fontsize{9}{10}\sf
 
 ```{r fbf}
-fb_stock <- gafa_stock |>
-  filter(Symbol == "FB")
-fb_stock |> autoplot(Close)
+total_staff <- staff |>
+  summarise(Count = sum(`In-School Staff Count`))
+total_staff |> autoplot(Count)
 ```
 
-## Facebook closing stock price
+## Total in-school staff
 \fontsize{10}{10}\sf
 
 ```{r augment}
-fb_stock <- fb_stock |>
-  mutate(trading_day = row_number()) |>
-  update_tsibble(index = trading_day, regular = TRUE)
-fit <- fb_stock |> model(NAIVE(Close))
+fit <- total_staff |> model(RW(Count ~ drift()))
 augment(fit)
 ```
 
-## Facebook closing stock price
+## Total in-school staff
 \fontsize{10}{10}\sf
 
 ```{r dj4, echo=TRUE, warning=FALSE, fig.height=3.4, dependson="augment"}
 augment(fit) |>
-  ggplot(aes(x = trading_day)) +
-  geom_line(aes(y = Close, colour = "Data")) +
+  ggplot(aes(x = Year)) +
+  geom_line(aes(y = Count, colour = "Data")) +
   geom_line(aes(y = .fitted, colour = "Fitted"))
 ```
 
-## Facebook closing stock price
-\fontsize{10}{10}\sf
-
-```{r dj4a, echo=TRUE, warning=FALSE, fig.height=3.4, dependson="augment"}
-augment(fit) |>
-  filter(trading_day > 1100) |>
-  ggplot(aes(x = trading_day)) +
-  geom_line(aes(y = Close, colour = "Data")) +
-  geom_line(aes(y = .fitted, colour = "Fitted"))
-```
-
-## Facebook closing stock price
+## Total in-school staff
 \fontsize{10}{10}\sf
 
 ```{r dj5, echo=TRUE, warning = FALSE, dependson="augment"}
 augment(fit) |>
   autoplot(.resid) +
-  labs(x = "Day", y = "", title = "Residuals from naïve method")
+  labs(x = "Day", y = "", title = "Residuals from RW w/ drift method")
 ```
 
-## Facebook closing stock price
+## Total in-school staff
 \fontsize{11}{11}\sf
 
 ```{r dj6, warning=FALSE, fig.height=3.4, dependson="augment"}
 augment(fit) |>
   ggplot(aes(x = .resid)) +
-  geom_histogram(bins = 150) +
+  geom_histogram(bins = 10) +
   labs(title = "Histogram of residuals")
 ```
 
-## Facebook closing stock price
+## Total in-school staff
 \fontsize{11}{11}\sf
 
 ```{r dj7, dependson="augment"}
@@ -190,10 +176,10 @@ augment(fit) |>
 augment(fit) |> features(.resid, ljung_box, lag = 10)
 ```
 
-# Lab Session 12
-## Lab Session 12
+# Lab Session 10
+## Lab Session 10
 
-  * Compute RW w/ drift forecasts for total student enrolments in Australia.
+  * Compute RW w/ drift forecasts for total student enrolments in Australia (`students`).
 
   * Test if the residuals are white noise. What do you conclude?
 
@@ -332,10 +318,15 @@ beer_fc <- forecast(beer_fit, h = "3 years")
 accuracy(beer_fc, aus_production)
 ```
 
-# Lab Session 13
-## Lab Session 13
+# Lab Session 11
+## Lab Session 11
 
- * Create a training set for Australian student enrolments by withholding the last four years as a test set.
+ * Create a training set for employed Australian students (`student_labour`) by withholding the last four years as a test set.
  * Fit all the appropriate benchmark methods to the training set and forecast the periods covered by the test set.
  * Compute the accuracy of your forecasts. Which method does best?
- * Repeat the exercise using the Australian takeaway food turnover data (`aus_retail`) with a test set of four years.
+ 
+::: {.callout-note}
+## Finished early?
+
+Repeat the exercise using the Australian takeaway food turnover data (`aus_retail`) with a test set of four years.
+:::
