@@ -9,7 +9,7 @@ sector_hours |>
 
 read_abs(series_id = "A84426293X")
 
-aus_students <- read_abs("6202.0", tables = "16") |> 
+student_labour <- read_abs("6202.0", tables = "16") |> 
   filter(series_type == "Original", data_type == "STOCK") |> 
   # Pad series with middle category
   mutate(
@@ -18,13 +18,23 @@ aus_students <- read_abs("6202.0", tables = "16") |>
       TRUE ~ series
     )
   )|> 
+  # Split series into separate variables
   separate_wider_delim(series, names = c("state", "attendance", "status", "junk"), delim = " ;") |> 
+  # Clean up variable values and names
   transmute(
     month = yearmonth(date),
-    across(c(state, attendance, status), trimws),
-    series_id, value = value * 1000
+    across(c(state, attendance, status), function(x) sub("^> ", "", trimws(x))),
+    series_id, persons = value * 1000
   ) |> 
+  # Remove aggregates
+  filter(state != "Australia", attendance != "Total", !grepl("total$", status)) |> 
+  # Construct tsibble
   as_tsibble(index = month, key = c(state, attendance, status))
+
+student_labour |> 
+  group_by(attendance) |> 
+  summarise(persons = sum(persons)) |> 
+  autoplot(persons)
 
 aus_students |> 
   filter(status == "Employed total", state == "Australia") |>
