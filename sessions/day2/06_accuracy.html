@@ -158,8 +158,16 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
         <li>
+    <a class="dropdown-item" href="https://github.com/mitchelloharawild/workshop-tidyfc-2024/archive/refs/heads/main.zip">
+ <span class="dropdown-text">Everything</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../../slides.zip">
  <span class="dropdown-text">Slides</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs.zip">
+ <span class="dropdown-text">Lab sessions</span></a>
   </li>  
     </ul>
   </li>
@@ -167,6 +175,11 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../../license.html"> <i class="bi bi-file-certificate" role="img">
 </i> 
 <span class="menu-text">License</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mitchelloharawild/workshop-tidyfc-2024"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -186,8 +199,8 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#lab-sessions" id="toc-lab-sessions" class="nav-link active" data-scroll-target="#lab-sessions">Lab sessions</a>
   <ul class="collapse">
-  <li><a href="#lab-session-12" id="toc-lab-session-12" class="nav-link" data-scroll-target="#lab-session-12">Lab Session 12</a></li>
-  <li><a href="#lab-session-13" id="toc-lab-session-13" class="nav-link" data-scroll-target="#lab-session-13">Lab Session 13</a></li>
+  <li><a href="#lab-session-10" id="toc-lab-session-10" class="nav-link" data-scroll-target="#lab-session-10">Lab Session 10</a></li>
+  <li><a href="#lab-session-11" id="toc-lab-session-11" class="nav-link" data-scroll-target="#lab-session-11">Lab Session 11</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/edit/main/sessions/day2/06_accuracy.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -226,20 +239,19 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="../../materials/07_ets.pdf">View slides in full screen</a></p>
 <section id="lab-sessions" class="level2">
 <h2 class="anchored" data-anchor-id="lab-sessions">Lab sessions</h2>
-<section id="lab-session-12" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-12">Lab Session 12</h3>
+<section id="lab-session-10" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-10">Lab Session 10</h3>
 <ul>
-<li>Compute RW w/ drift forecasts for total student enrolments in Australia.</li>
+<li>Use RW w/ drift to model total student enrolments in Australia (<code>students</code>).</li>
 <li>Test if the residuals are white noise. What do you conclude?</li>
 </ul>
 </section>
-<section id="lab-session-13" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-13">Lab Session 13</h3>
+<section id="lab-session-11" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-11">Lab Session 11</h3>
 <ul>
-<li>Create a training set for Australian student enrolments by withholding the last four years as a test set.</li>
+<li>Create a training set for employed Australian students (<code>student_labour</code>) by withholding the last four years as a test set.</li>
 <li>Fit all the appropriate benchmark methods to the training set and forecast the periods covered by the test set.</li>
 <li>Compute the accuracy of your forecasts. Which method does best?</li>
-<li>Repeat the exercise using the Australian takeaway food turnover data (<code>aus_retail</code>) with a test set of four years.</li>
 </ul>
 
 

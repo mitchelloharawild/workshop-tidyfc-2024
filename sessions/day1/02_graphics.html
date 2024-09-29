@@ -192,8 +192,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
         <li>
+    <a class="dropdown-item" href="https://github.com/mitchelloharawild/workshop-tidyfc-2024/archive/refs/heads/main.zip">
+ <span class="dropdown-text">Everything</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../../slides.zip">
  <span class="dropdown-text">Slides</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs.zip">
+ <span class="dropdown-text">Lab sessions</span></a>
   </li>  
     </ul>
   </li>
@@ -201,6 +209,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../../license.html"> <i class="bi bi-file-certificate" role="img">
 </i> 
 <span class="menu-text">License</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mitchelloharawild/workshop-tidyfc-2024"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -218,10 +231,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#lab-sessions" id="toc-lab-sessions" class="nav-link active" data-scroll-target="#lab-sessions">Lab sessions</a>
+  <li><a href="#lab-sessions" id="toc-lab-sessions" class="nav-link active" data-scroll-target="#lab-sessions">Lab sessions</a></li>
+  <li><a href="#lab-session-3" id="toc-lab-session-3" class="nav-link" data-scroll-target="#lab-session-3">Lab Session 3</a>
   <ul class="collapse">
-  <li><a href="#lab-session-3" id="toc-lab-session-3" class="nav-link" data-scroll-target="#lab-session-3">Lab Session 3</a></li>
   <li><a href="#lab-session-4" id="toc-lab-session-4" class="nav-link" data-scroll-target="#lab-session-4">Lab Session 4</a></li>
+  <li><a href="#lab-session-4-1" id="toc-lab-session-4-1" class="nav-link" data-scroll-target="#lab-session-4-1">Lab Session 4</a></li>
   <li><a href="#lab-session-5" id="toc-lab-session-5" class="nav-link" data-scroll-target="#lab-session-5">Lab Session 5</a></li>
   </ul></li>
   </ul>
@@ -261,31 +275,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="../../materials/02_graphics.pdf">View slides in full screen</a></p>
 <section id="lab-sessions" class="level2">
 <h2 class="anchored" data-anchor-id="lab-sessions">Lab sessions</h2>
-<section id="lab-session-3" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-3">Lab Session 3</h3>
-<ol type="1">
-<li><p>Look at the quarterly tourism data for the Snowy Mountains</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>snowy <span class="ot">&lt;-</span> tourism <span class="sc">|&gt;</span> <span class="fu">filter</span>(Region <span class="sc">==</span> <span class="st">"Snowy Mountains"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>Use <code>autoplot()</code>, <code>gg_season()</code> and <code>gg_subseries()</code> to explore the data.</li>
-<li>What do you learn?</li>
-</ul></li>
-<li><p>Produce a calendar plot for the <code>pedestrian</code> data from one location and one year.</p></li>
-</ol>
 </section>
+<section id="lab-session-3" class="level2">
+<h2 class="anchored" data-anchor-id="lab-session-3">Lab Session 3</h2>
+<ol type="1">
+<li>Create time plots of the total school students and staff.</li>
+<li>Create time plots of the total students and staff by state.</li>
+<li>Use ggplot2 to create a time plot from scratch, complete with labels.</li>
+</ol>
 <section id="lab-session-4" class="level3">
 <h3 class="anchored" data-anchor-id="lab-session-4">Lab Session 4</h3>
-<p>We have introduced the following functions: <code>gg_lag</code> and <code>ACF</code>. Use these functions to explore the four time series: <code>Bricks</code> from <code>aus_production</code>, <code>Lynx</code> from <code>pelt</code>, <code>Close</code> price of Amazon from <code>gafa_stock</code>, <code>Demand</code> from <code>vic_elec</code>. Can you spot any seasonality, cyclicity and trend? What do you learn about the series?</p>
+<ol type="1">
+<li><p>Look at the monthly labour force of 15-24 year olds by State/Territory and educational attendance (6202.0 table 16).</p>
+<p>The code to prepare this data is in <code>student_labour.R</code>.</p></li>
+<li><p>Use <code>autoplot()</code>, <code>gg_season()</code> and <code>gg_subseries()</code> to explore the data.</p>
+<p>Look at different aggregations of the data, for example total persons by attendance.</p></li>
+<li><p>What do you learn?</p></li>
+</ol>
+</section>
+<section id="lab-session-4-1" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-4-1">Lab Session 4</h3>
+<p>Explore the <code>ACF()</code> of the following time series:</p>
+<ol type="1">
+<li>Education payroll (<code>payroll_education</code>)</li>
+<li>Total full-time students (<code>students</code>)</li>
+<li>Total working students aged 15-24 in ACT (<code>student_labour</code>)</li>
+</ol>
+<p>Can you spot any seasonality, cyclicity and trend? What do you learn about the series?</p>
 </section>
 <section id="lab-session-5" class="level3">
 <h3 class="anchored" data-anchor-id="lab-session-5">Lab Session 5</h3>
-<p>Calculate the difference in ACT student enrolments, it can be done as follows:</p>
+<p>Plot the difference in ACT student enrolments, it can be done as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">|&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(State <span class="sc">==</span> <span class="st">"ACT"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff =</span> <span class="fu">difference</span>(Count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>students <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">State/Territory</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"ACT"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">All Full-time and Part-time Student count</span><span class="st">`</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="fu">difference</span>(total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Does <code>diff</code> look like white noise?</p>
+<p>Does <code>diff</code> look like white noise? Hint: Check the ACF</p>
 
 
 </section>

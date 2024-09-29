@@ -158,8 +158,16 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-downloads">    
         <li>
+    <a class="dropdown-item" href="https://github.com/mitchelloharawild/workshop-tidyfc-2024/archive/refs/heads/main.zip">
+ <span class="dropdown-text">Everything</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../../slides.zip">
  <span class="dropdown-text">Slides</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs.zip">
+ <span class="dropdown-text">Lab sessions</span></a>
   </li>  
     </ul>
   </li>
@@ -167,6 +175,11 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../../license.html"> <i class="bi bi-file-certificate" role="img">
 </i> 
 <span class="menu-text">License</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mitchelloharawild/workshop-tidyfc-2024"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -228,22 +241,23 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="lab-sessions">Lab sessions</h2>
 <section id="lab-session-1" class="level3">
 <h3 class="anchored" data-anchor-id="lab-session-1">Lab Session 1</h3>
+<p>Create a tsibble for the annual number of in-school staff.</p>
 <ol type="1">
-<li>Use the <code>readabs</code> package to download and tidy the time series data from table <code>"19"</code> of the <code>"6202.0"</code> catalogue.</li>
-<li>Use <code>filter()</code> to remove time series relating to hours worked disaggregated by State/Territory. Also remove the aggregated time series (which specify <code>"Persons"</code>).</li>
-<li>Split the series column into two columns, <code>workload</code> and <code>sex</code> using the <code>separate()</code> function.</li>
-<li>Create a tsibble with the appropriate index and key variables, you will need to convert the date variable into a time variable with the appropriate granularity.</li>
-<li>Find which series contains the most worked hours.</li>
-<li>Create a new tsibble which aggregates over <code>sex</code>, and just has monthly worked hours by type.</li>
+<li><p>Download table 50a from the ABS Schools release.</p>
+<p><a href="https://www.abs.gov.au/statistics/people/education/schools/latest-release" class="uri">https://www.abs.gov.au/statistics/people/education/schools/latest-release</a></p></li>
+<li><p>Look at the data to see what it contains.</p></li>
+<li><p>Identify the index and key variables to convert it into a tsibble with <code>as_tsibble()</code>.</p></li>
+<li><p>How many time series does this dataset contain?</p></li>
 </ol>
 </section>
 <section id="lab-session-2" class="level3">
 <h3 class="anchored" data-anchor-id="lab-session-2">Lab Session 2</h3>
-<ul>
-<li>Create time plots of the following four time series: <code>Bricks</code> from <code>aus_production</code>, <code>Lynx</code> from <code>pelt</code>, <code>Close</code> from <code>gafa_stock</code>, <code>Demand</code> from <code>vic_elec</code>.</li>
-<li>Use <code>help()</code> to find out about the data in each series.</li>
-<li>For the last plot, modify the axis labels and title.</li>
-</ul>
+<p>With the annual number of in-school staff:</p>
+<ol start="5" type="1">
+<li>Find which state has the most in-school staff in 2022.</li>
+<li>Create a new tsibble of total in-school staff for each state/territory and school type (affiliation 2).</li>
+<li>What is the typical difference in total number of male and female in-school staff? (try to visualise this!)</li>
+</ol>
 
 
 </section>
