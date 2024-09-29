@@ -168,12 +168,11 @@ For observations more frequent than once per year, we need to use a time class f
 \fontsize{12}{13}\sf
 
 ```{r tstablemonth, echo=FALSE}
-z <- tibble(Month = paste(2019, month.abb[1:5]), Observation = c(50, 23, 34, 30, 25))
-# knitr::kable(z, booktabs=TRUE)
+tsbl <- tibble(Month = paste(2019, month.abb[1:5]), Observation = c(50, 23, 34, 30, 25))
 ```
 
 ```{r tstablemonth2}
-z
+tsbl
 ```
 
 \vspace*{10cm}
@@ -186,7 +185,7 @@ For observations more frequent than once per year, we need to use a time class f
 \fontsize{12}{13}\sf
 
 ```{r month-tsibble}
-z |>
+tsbl |>
   mutate(Month = yearmonth(Month)) |>
   as_tsibble(index = Month)
 ```
@@ -212,248 +211,513 @@ tribble(
   knitr::kable(booktabs = TRUE)
 ```
 
-# Example: Australian prison population
+# Example: School students and staff
 
-## Australian prison population
+## Australian school students
 
-\full{Beechworth_prison}
+\full{australian_school}
 
-## Read a csv file and convert to a tsibble
-\fontsize{10}{11}\sf
+## Download the data and inspect it
 
-```{r prison}
-prison <- readr::read_csv("data/prison_population.csv")
+<https://www.abs.gov.au/statistics/people/education/schools/latest-release>
+
+1. Download table 42b from the ABS Schools release.
+2. Open in your spreadsheet viewer to inspect the structure.
+
+. . .
+
+:::{.callout-caution}
+## What's in the data?
+
+* What information is available in this table?
+* How ready is this data for analysis? Is it 'tidy'?
+:::
+
+## Loading ABS data into R
+
+Use the `readxl` package to read the excel spreadsheet into R.
+
+:::{.callout-tip}
+## ABS data
+
+Data from the ABS often contains unwanted information in the first few rows. Skip the first 4 rows with `read_excel("data.xlsx", skip = 4)`.
+:::
+
+. . .
+
+```{r}
+library(readxl)
+students <- read_excel(
+  "data/schools/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx",
+  sheet = 3, skip = 4
+)
 ```
-```{r prison2a, dependson="prison", echo=FALSE}
-prison
+
+## Convert the data into a tsibble
+
+\fontsize{14}{14}\sf
+
+:::{.callout-caution}
+## Converting into a tsibble
+
+Use `as_tsibble()` to convert a dataset into a tsibble.
+
+Which column(s) are:
+
+* The `index` variable
+* Identifying `key` variable(s)
+* Measured variable(s)
+:::
+
+:::{.callout-tip}
+## Hint: Look at the data
+
+Print `students`, look at unique values with `distinct()` or get an overview of the data structure with `str()`.
+:::
+
+## Convert the data into a tsibble
+
+\fontsize{12}{12}\sf
+
+```{r}
+#| error: true
+students_tsbl <- as_tsibble(
+  students,
+  key = c(`State/Territory`, `Affiliation (Gov/Non-gov)`, `Affiliation (Gov/Cath/Ind)`,
+          Sex, `Aboriginal and Torres Strait Islander Status`, `School Level`,
+          `National Report on Schooling (ANR) School Level`,
+          `Year (Grade)`, Age),
+  index = Year
+)
 ```
-## Read a csv file and convert to a tsibble
-\fontsize{10}{11}\sf
 
-```{r prison3}
-prison <- readr::read_csv("data/prison_population.csv") |>
-  mutate(Quarter = yearquarter(date))
+. . .
+
+:::{.callout-important}
+## Safety included!
+
+The `tsibble` package is strict! This helps make sure your data is correct.
+
+Use `duplicates()` to investigate problems in the data.
+:::
+
+## Detecting duplicates
+
+\fontsize{12}{12}\sf
+
+```{r}
+#| eval: false
+duplicates(
+  students,
+  key = c(`State/Territory`, `Affiliation (Gov/Non-gov)`, `Affiliation (Gov/Cath/Ind)`,
+          Sex, `Aboriginal and Torres Strait Islander Status`, `School Level`,
+          `National Report on Schooling (ANR) School Level`,
+          `Year (Grade)`, Age),
+  index = Year
+)
 ```
 
-```{r prison3a, dependson="prison3", echo=FALSE}
-prison
-```
+. . .
 
-## Read a csv file and convert to a tsibble
-\fontsize{10}{11}\sf
+:::{.callout-note}
+## Multiple measurements
 
-```{r prison4}
-prison <- readr::read_csv("data/prison_population.csv") |>
-  mutate(Quarter = yearquarter(date)) |>
-  select(-date)
-```
+You can't make two measurements at the exact same time.
 
-```{r prison4a, dependson="prison4", echo=FALSE}
-prison
-```
+It looks like the ABS has made a mistake here!
+:::
 
-## Read a csv file and convert to a tsibble
-\fontsize{10}{11}\sf
+## De-duplication
 
-```{r prison5}
-prison <- readr::read_csv("data/prison_population.csv") |>
-  mutate(Quarter = yearquarter(date)) |>
-  select(-date) |>
+When you encounter problems with the data itself, you should follow up with the data provider.
+
+Often duplicates can be resolved by either:
+
+* filtering to remove duplicates
+* aggregating to sum over duplicates
+
+:::{.callout-caution}
+## How should we fix the data?
+
+Is filtering or aggregation best for fixing this problem?
+
+:::
+
+## Tidy tsibble
+
+\fontsize{10}{10}\sf
+
+```{r}
+students_tsbl <- students |> 
+  # Group by Year and all the character variables
+  group_by(Year, across(where(is.character), identity)) |> 
+  # Add up the duplicate rows
+  summarise(across(ends_with("count"), sum), .groups = "drop") |> 
+  # Convert to a tsibble
   as_tsibble(
-    index = Quarter,
-    key = c(state, gender, legal, indigenous)
+    key = where(is.character),
+    index = Year
   )
-```
-
-```{r prison5a, dependson="prison5", echo=FALSE}
-prison
-```
-
-# Example: Australian pharmaceutical sales
-
-## Australian Pharmaceutical Benefits Scheme
-
-\full{pills}
-
-## Australian Pharmaceutical Benefits Scheme
-\begin{block}{}
-The \alert{Pharmaceutical Benefits Scheme} (PBS) is the Australian government drugs subsidy scheme.
-\end{block}
-\pause\fontsize{13.3}{15}\sf
-
-  * Many drugs bought from pharmacies are subsidised to allow more equitable access to modern drugs.
-  * The cost to government is determined by the number and types of drugs purchased. Currently nearly 1\% of GDP.
-  * The total cost is budgeted based on forecasts of drug usage.
-  * Costs are disaggregated by drug type (ATC1 x`r length(unique(PBS$ATC1))` / ATC2 `r length(unique(PBS$ATC2))`), concession category (x`r length(unique(PBS$Concession))`) and patient type (x`r length(unique(PBS$Type))`), giving $84\times2\times2=`r 84*2*2`$ time series.
-
-## Working with `tsibble` objects
-\fontsize{8}{10}\sf
-
-```{r wide, include=FALSE}
-options(width = 78)
-```
-
-```{r pbs1, dependson='wide'}
-PBS
-```
-
-## Working with `tsibble` objects
-\fontsize{12}{14}\sf
-
-We can use the `filter()` function to select rows.
-
-\fontsize{8}{10}\sf
-
-```{r pbs2}
-PBS |>
-  filter(ATC2 == "A10")
-```
-
-## Working with `tsibble` objects
-\fontsize{12}{14}\sf
-
-We can use the `select()` function to select columns.
-
-\fontsize{8}{10}\sf
-
-```{r pbs3}
-PBS |>
-  filter(ATC2 == "A10") |>
-  select(Month, Concession, Type, Cost)
-```
-
-## Working with `tsibble` objects
-\fontsize{12}{14}\sf
-
-We can use the `summarise()` function to summarise over keys.
-
-\fontsize{8}{10}\sf
-
-```{r pbs4}
-PBS |>
-  filter(ATC2 == "A10") |>
-  select(Month, Concession, Type, Cost) |>
-  summarise(total_cost = sum(Cost))
-```
-
-## Working with `tsibble` objects
-\fontsize{12}{14}\sf
-
-We can use the `mutate()` function to create new variables.
-
-\fontsize{8}{10}\sf
-
-```{r pbs5}
-PBS |>
-  filter(ATC2 == "A10") |>
-  select(Month, Concession, Type, Cost) |>
-  summarise(total_cost = sum(Cost)) |>
-  mutate(total_cost = total_cost / 1e6)
-```
-
-## Working with `tsibble` objects
-\fontsize{12}{14}\sf
-
-We can use the `mutate()` function to create new variables.
-
-\fontsize{8}{10}\sf
-
-```{r pbs6}
-PBS |>
-  filter(ATC2 == "A10") |>
-  select(Month, Concession, Type, Cost) |>
-  summarise(total_cost = sum(Cost)) |>
-  mutate(total_cost = total_cost / 1e6) -> a10
-```
-
-```{r a10, echo=FALSE, dependson="pbs6"}
-a10
-```
-
-```{r narrow, include=FALSE}
-options(width = 60)
+students_tsbl
 ```
 
 # Lab Session 1
 
-## Lab Session 1a
+## Lab Session 1
 \fontsize{14}{15}\sf
 
- 1. Use the `readabs` package to download and tidy the time series data from table `"19"` of the `"6202.0"` catalogue.
- 2. Use `filter()` to remove time series relating to hours worked disaggregated by State/Territory. Also remove the aggregated time series (which specify `"Persons"`).
- 3. Split the series column into two columns, `workload` and `sex` using the `separate()` function.
- 4. Create a tsibble with the appropriate index and key variables, you will need to convert the date variable into a time variable with the appropriate granularity.
+Create a tsibble for the annual number of in-school staff.
 
-## Lab Session 1b
-\fontsize{14}{15}\sf
+1. Download table 50a from the ABS Schools release.
 
-Now let's look at this data:
+   <https://www.abs.gov.au/statistics/people/education/schools/latest-release>
 
- 5. Find which series contains the most worked hours.
- 6. Create a new tsibble which aggregates over `sex`, and just has monthly worked hours by type.
- 7. What is the typical difference in total working hours between full time and part time employees? (try to visualise this!)
+2. Look at the data to see what it contains.
 
-# Time plots
-## Time plots
-\fontsize{10}{11}\sf
+3. Identify the index and key variables to convert it into a tsibble with `as_tsibble()`.
 
-```{r maxtemp, fig.height=2.4}
-maxtemp <- vic_elec |>
-  index_by(Day = date(Time)) |>
-  summarise(Temperature = max(Temperature))
-maxtemp |>
-  autoplot(Temperature) +
-  labs(y = "Max temperature")
+4. How many time series does this dataset contain?
+
+# Example: Internet vacancy index
+
+## Internet vacancy index
+
+\full{internet_vacancies}
+
+<https://www.jobsandskills.gov.au/data/>
+
+## Download the data and inspect it
+
+Download the data from:
+
+<https://www.jobsandskills.gov.au/data/internet-vacancy-index>
+
+Inspect the data's structure in a spreadsheet viewer.
+
+:::{.callout-caution}
+## What's in the data?
+
+* What information is available in this table?
+* How ready is this data for analysis? Is it 'tidy'?
+:::
+
+## Read the data into R
+
+Again, using `readxl` we'll load the data into R.
+
+This time we don't need to skip any rows.
+
+\fontsize{10}{10}\sf
+
+```{r}
+library(readxl)
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1)
 ```
 
-## Ansett airlines
+## Tidy the data into a long form
 
-\full{ansettlogo}
+The time information is in a wide (untidy) format.
 
-## Ansett airlines
-\fontsize{11}{12}\sf
+We can use the `tidyr` package to convert it into a long (tidy) format with the `pivot_longer()` function.
 
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  autoplot(Passengers)
+\fontsize{10}{10}\sf
+```{r}
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies")
 ```
 
-## Ansett airlines
-\fontsize{11}{12}\sf
+## Tidy the time variable
 
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  filter(Class == "Economy") |>
-  autoplot(Passengers)
+The time variable doesn't look like dates at all.
+
+We can blame excel for this.
+
+:::{.callout-tip}
+## Excel dates
+
+Excel stores dates as numbers, the number of days since January 1st 1900. We can convert these numbers back into dates with `as.Date(month, origin = "1900-01-01")`.
+:::
+
+\fontsize{10}{10}\sf
+```{r}
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies") |> 
+  mutate(month = as.Date(as.integer(month), origin = "1900-01-01"))
 ```
 
-## Ansett airlines
-\fontsize{11}{12}\sf
 
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  filter(Airports == "MEL-SYD") |>
-  autoplot(Passengers)
+## Tidy the time variable
+
+We also need to use the correct temporal granularity. In this case the data is monthly, so we need to use `yearmonth()` for the time index.
+
+\fontsize{10}{10}\sf
+```{r}
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies") |> 
+  mutate(month = yearmonth(as.Date(as.integer(month), origin = "1900-01-01")))
 ```
 
-## Ansett airlines
-\fontsize{11}{12}\sf
+## Create the tsibble
 
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  filter(Airports == "MEL-SYD") |>
-  autoplot(Passengers)
+The data is now ready to convert into a tsibble.
+
+\fontsize{10}{10}\sf
+```{r}
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies") |> 
+  mutate(month = yearmonth(as.Date(as.integer(month), origin = "1900-01-01"))) |> 
+  # Convert to a tsibble
+  as_tsibble(
+    key = c(Level, Title, State),
+    index = month
+  )
 ```
 
-\begin{textblock}{2.5}(12.6,7.3)
-\begin{alertblock}{}
-Not the real data! Or is it?
-\end{alertblock}
-\end{textblock}
+## Removing the aggregates
+
+::: {.callout-tip}
+## ABS aggregates
+
+Data from the ABS often mixes aggregate values into the data.
+
+This is done inconsistently ("Total", "AUST", etc.) and isn't tidy.
+
+To work with aggregates in tidy data analysis, we prefer to compute them ourselves with `group_by()` and `summarise()`. 
+:::
+
+
+\fontsize{10}{10}\sf
+```{r}
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies") |> 
+  mutate(month = yearmonth(as.Date(as.integer(month), origin = "1900-01-01"))) |> 
+  # Remove aggregates
+  filter(Level == 3, State != "AUST") |> 
+  # Convert to a tsibble
+  as_tsibble(
+    key = c(Title, State),
+    index = month
+  )
+```
+
+## Adding extra information
+
+The ANZSCO2 code contains two different levels of categorisation.
+
+Our data currently only contains the titles for level 3 codes, but it is useful to add back their respective level 2 category.
+
+\fontsize{10}{10}\sf
+```{r}
+anzsco_categories <- read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  filter(Level == 2) |> 
+  distinct(ANZSCO_CODE, Title)
+anzsco_categories
+```
+
+## Adding extra information
+
+We can add these categories using a `left_join()`, matching the first character of the `ANZSCO_CODE` with the earlier table.
+
+\fontsize{10}{10}\sf
+```{r}
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies") |> 
+  mutate(month = yearmonth(as.Date(as.integer(month), origin = "1900-01-01"))) |> 
+  # Remove aggregates
+  filter(Level == 3, State != "AUST") |> 
+  # Add level 2 category information
+  mutate(ANZSCO_CODE_CAT = substr(ANZSCO_CODE, 1, 1)) |> 
+  left_join(anzsco_categories, by = c("ANZSCO_CODE_CAT" = "ANZSCO_CODE"), suffix = c("", "_CAT")) |> 
+  select(ANZSCO_CODE, Title_CAT, Title, State, month, vacancies) |> 
+  # Convert to a tsibble
+  as_tsibble(
+    key = c(Title_CAT, Title, State),
+    index = month
+  ) -> internet_vacancies
+```
+
+## Data cleaning
+
+:::{.callout-tip}
+## Data janitors
+
+Data cleaning can be tiresome and unglamourous.
+It's the janitorial work of the data world.
+
+Without janitors, the world (or your analysis) will crumble.
+
+Starting with quality data is essential for a quality analysis.
+:::
+
+To keep this workshop focused on forecasting, I'll be giving you tidy data (and the code I wrote to tidy it) from here on.
+
+## Data cleaning
+
+Experts claim data analysis time is 80\% data cleaning and preparation, and if you work with public data that is almost certainly true!
+
+. . .
+
+:::{.callout-note}
+## More information
+
+Learning and applying the principles of tidy data prevents problems later in the analysis (or worse, after the analysis is complete!).
+
+Learn more about tidy data here: 
+
+<https://tidyr.tidyverse.org/articles/tidy-data.html>
+:::
+
+# Filtering time series
+
+## Manipulating time series data
+
+Since a `tsibble` is rectangular data (like a `data.frame`/`tibble`), we can use existing data tools to manipulate it.
+
+I recommend using the tidyverse (especially `dplyr`) for this.
+
+. . .
+
+::: {.callout-note}
+## Other data operations
+
+It is also possible to use other data manipulation functions from other packages. The tidyverse is best for tsibble as there is specific methods added to maintain safe temporal operations.
+:::
+
+## Filtering time series
+
+A common task is looking at specific time series.
+
+We can use `filter()` on key variables for this.
+
+\fontsize{10}{10}\sf
+```{r}
+internet_vacancies |> 
+  filter(Title == "Education Professionals")
+```
+
+## Filtering time series
+
+::: {.callout-tip}
+## Identifying key variables
+
+To find all the possible values for time series, you can use `key_data()` or `distinct()`.
+:::
+
+\fontsize{10}{10}\sf
+```{r}
+internet_vacancies |> 
+  distinct(State)
+```
+
+## Filtering time series
+
+::: {.callout-caution}
+## Looking at ACT
+
+How would we further filter our `Education Professionals` series to be specific to the ACT?
+:::
+
+. . .
+
+\fontsize{10}{10}\sf
+```{r}
+internet_vacancies |> 
+  filter(
+    Title == "Education Professionals",
+    State == "ACT"
+  )
+```
+
+# Aggregating time series
+
+## Aggregating time series
+
+The other common task is aggregating time series.
+
+For this we use the `group_by() |> summarise()` combination.
+
+. . .
+
+::: {.callout-tip}
+## Transforming time with the tidyverse
+
+For *almost* all functions, a tsibble is identical to tibble.
+
+A ***key*** difference is that tsibbles group the time ***index***.
+:::
+
+## Aggregating time series
+
+Let's compute the total internet vacancies for each ANZSCO2.
+
+\fontsize{10}{10}\sf
+```{r}
+internet_vacancies |> 
+  group_by(Title_CAT, Title) |> 
+  summarise(vacancies = sum(vacancies), .groups = "drop")
+```
+
+## Aggregating time series
+
+This can be combined with filtering, to give the total internet vacancies for education professionals.
+
+\fontsize{10}{10}\sf
+```{r}
+internet_vacancies |> 
+  filter(Title == "Education Professionals") |> 
+  group_by(Title_CAT, Title) |> 
+  summarise(vacancies = sum(vacancies), .groups = "drop")
+```
+
+## Aggregating time
+
+It is also common to produce temporal aggregates.
+
+For example: aggregating monthly data to annual.
+
+For this, we use the `index_by()` function (like `group_by()`).
+
+. . .
+
+\fontsize{10}{10}\sf
+```{r}
+internet_vacancies |> 
+  filter(Title == "Education Professionals") |> 
+  index_by(Year = year(month)) |> 
+  group_by(Title_CAT, Title) |> 
+  summarise(vacancies = sum(vacancies), .groups = "drop")
+```
+
+## Aggregating time
+
+Sometimes we want to aggregate over all of time.
+
+In this case we will no longer have a time series.
+
+To do this, we convert back to tibble with `as_tibble()`.
+
+\fontsize{10}{10}\sf
+```{r}
+internet_vacancies |> 
+  filter(Title == "Education Professionals") |> 
+  as_tibble() |> 
+  group_by(Title_CAT, Title) |> 
+  summarise(vacancies = sum(vacancies), .groups = "drop")
+```
 
 # Lab Session 2
-## Lab Session 2
 
-- Create time plots of the following four time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `Close` from `gafa_stock`, `Demand` from `vic_elec`.
-- Use `help()` to find out about the data in each series.
-- For the last plot, modify the axis labels and title.
+## Lab Session 2
+\fontsize{14}{15}\sf
+
+With the annual number of in-school staff:
+
+ 5. Find which state has the most in-school staff in 2022.
+ 6. Create a new tsibble of total in-school staff for each state/territory and school type (affiliation 2).
+ 7. What is the typical difference in total number of male and female in-school staff? (try to visualise this!)

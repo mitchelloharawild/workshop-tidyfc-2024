@@ -28,6 +28,72 @@ format:
 source("setup.R")
 ```
 
+
+# Time plots
+## Time plots
+\fontsize{10}{11}\sf
+
+```{r maxtemp, fig.height=2.4}
+maxtemp <- vic_elec |>
+  index_by(Day = date(Time)) |>
+  summarise(Temperature = max(Temperature))
+maxtemp |>
+  autoplot(Temperature) +
+  labs(y = "Max temperature")
+```
+
+## Ansett airlines
+
+\full{ansettlogo}
+
+## Ansett airlines
+\fontsize{11}{12}\sf
+
+```{r, echo=TRUE, fig.height=3.1}
+ansett |>
+  autoplot(Passengers)
+```
+
+## Ansett airlines
+\fontsize{11}{12}\sf
+
+```{r, echo=TRUE, fig.height=3.1}
+ansett |>
+  filter(Class == "Economy") |>
+  autoplot(Passengers)
+```
+
+## Ansett airlines
+\fontsize{11}{12}\sf
+
+```{r, echo=TRUE, fig.height=3.1}
+ansett |>
+  filter(Airports == "MEL-SYD") |>
+  autoplot(Passengers)
+```
+
+## Ansett airlines
+\fontsize{11}{12}\sf
+
+```{r, echo=TRUE, fig.height=3.1}
+ansett |>
+  filter(Airports == "MEL-SYD") |>
+  autoplot(Passengers)
+```
+
+\begin{textblock}{2.5}(12.6,7.3)
+\begin{alertblock}{}
+Not the real data! Or is it?
+\end{alertblock}
+\end{textblock}
+
+# Lab Session 2
+## Lab Session 2
+
+- Create time plots of the following four time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `Close` from `gafa_stock`, `Demand` from `vic_elec`.
+- Use `help()` to find out about the data in each series.
+- For the last plot, modify the axis labels and title.
+
 # Seasonal plots
 
 ## Seasonal plots
@@ -284,7 +350,7 @@ new_production |>
 \fontsize{9}{10}\sf
 
 ```{r students}
-students <- readxl::read_excel("../data/schools/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx", sheet = 3, skip = 4) |> 
+students <- readxl::read_excel("https://www.abs.gov.au/statistics/people/education/schools/2023/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx", sheet = 3, skip = 4) |> 
   group_by(Year, State = substring(`State/Territory`, 3)) |> 
   summarise(Count = sum(`All Full-time and Part-time Student count`), .groups = "drop") |> 
   as_tsibble(index = Year, key = State)

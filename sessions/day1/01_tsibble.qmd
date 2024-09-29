@@ -17,15 +17,23 @@ image: "aron-visuals-BXOXnQ26B7o-unsplash.jpg"
 
 ### Lab Session 1
 
- 1. Use the `readabs` package to download and tidy the time series data from table `"19"` of the `"6202.0"` catalogue.
- 2. Use `filter()` to remove time series relating to hours worked disaggregated by State/Territory. Also remove the aggregated time series (which specify `"Persons"`).
- 3. Split the series column into two columns, `workload` and `sex` using the `separate()` function.
- 4. Create a tsibble with the appropriate index and key variables, you will need to convert the date variable into a time variable with the appropriate granularity.
- 5. Find which series contains the most worked hours.
- 6. Create a new tsibble which aggregates over `sex`, and just has monthly worked hours by type.
- 
+
+Create a tsibble for the annual number of in-school staff.
+
+1. Download table 50a from the ABS Schools release.
+
+   <https://www.abs.gov.au/statistics/people/education/schools/latest-release>
+
+2. Look at the data to see what it contains.
+
+3. Identify the index and key variables to convert it into a tsibble with `as_tsibble()`.
+
+4. How many time series does this dataset contain?
+
 ### Lab Session 2
 
-- Create time plots of the following four time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `Close` from `gafa_stock`, `Demand` from `vic_elec`.
-- Use `help()` to find out about the data in each series.
-- For the last plot, modify the axis labels and title.
+With the annual number of in-school staff:
+
+ 5. Find which state has the most in-school staff in 2022.
+ 6. Create a new tsibble of total in-school staff for each state/territory and school type (affiliation 2).
+ 7. What is the typical difference in total number of male and female in-school staff? (try to visualise this!)
