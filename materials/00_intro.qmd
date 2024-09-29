@@ -48,7 +48,7 @@ source("setup.R")
   * This is not an introduction to R. We assume you are broadly comfortable with R code, the RStudio environment and the tidyverse.
   * This is not a statistics course. We assume you are familiar with concepts such as the mean, standard deviation, quantiles, regression, normal distribution, likelihood, etc.
   * This is not a theory course. We are not going to derive anything. We will teach you time series and forecasting tools, when to use them, and how to use them most effectively.
-
+  
 ## Key reference
 
 \large
@@ -123,3 +123,9 @@ install.packages(c(
 
 \vspace*{.0cm}\begin{alertblock}{}{\centerline{\Large\textbf{workshop.nectric.com.au/tidyfc2024}}}
 \end{alertblock}
+
+## Fun post-forecasting training project
+
+The members of the Economic Analysis Team will be conducting a project following the forecasting training session to engrain the learnings and practice our skills. 
+
+Other attendees are welcome to join in the fun, particularly if you’re not in a forecasting area and would otherwise not be using your newly acquired skills.

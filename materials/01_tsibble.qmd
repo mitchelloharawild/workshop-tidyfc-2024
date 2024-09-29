@@ -573,6 +573,25 @@ Learn more about tidy data here:
 <https://tidyr.tidyverse.org/articles/tidy-data.html>
 :::
 
+## Workshop data
+
+<https://workshop.nectric.com.au/tidyfc2024/labs.zip>
+
+Download this ZIP to access all the tidied data.
+
+Open the project by double-clicking 'tidyfc-exercises.Rproj'.
+
+
+::: {.callout-note}
+
+## Alternatively...
+
+```r
+usethis::use_course("https://workshop.nectric.com.au/tidyfc2024/labs.zip")
+```
+
+:::
+
 # Filtering time series
 
 ## Manipulating time series data
