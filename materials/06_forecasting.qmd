@@ -319,17 +319,10 @@ new_production |> autoplot(Beer) +
 
 ## Some simple forecasting methods
 
-```{r pigs, fig.height=4.6, echo=FALSE}
-aus_livestock |>
-  filter(
-    between(year(Month), 1992, 1996),
-    Animal == "Pigs", State == "Victoria"
-  ) |>
-  autoplot(Count) +
-  labs(
-    x = "Year", y = "thousands",
-    title = "Number of pigs slaughtered in Victoria, 1990-1995"
-  )
+```{r staff, fig.height=4.6, echo=FALSE}
+staff |> 
+  summarise(`In-School Staff Count` = sum(`In-School Staff Count`)) |> 
+  autoplot(`In-School Staff Count`)
 ```
 
 \begin{textblock}{7}(0.4,7.9)
@@ -384,7 +377,7 @@ bricks |>
 ## Some simple forecasting methods
 \fontsize{13}{14}\sf
 
-### `NAIVE(y)`: Naïve method
+### `NAIVE(y)`: Naive method
 
   * Forecasts equal to last observed value.
   * Forecasts: $\hat{y}_{T+h|T} =y_T$.
@@ -403,7 +396,7 @@ bricks |>
 ## Some simple forecasting methods
 \fontsize{13}{14}\sf
 
-### `SNAIVE(y ~ lag(m))`: Seasonal naïve method
+### `SNAIVE(y ~ lag(m))`: Seasonal naive method
 
   * Forecasts equal to last value from same season.
   * Forecasts: $\hat{y}_{T+h|T} =y_{T+h-m(k+1)}$, where $m=$ seasonal period and $k$ is the integer part of $(h-1)/m$.
@@ -460,8 +453,8 @@ The `model()` function trains models to data.
 brick_fit <- aus_production |>
   filter(!is.na(Bricks)) |>
   model(
-    `Seasonal_naïve` = SNAIVE(Bricks),
-    `Naïve` = NAIVE(Bricks),
+    `Seasonal_naive` = SNAIVE(Bricks),
+    `Naive` = NAIVE(Bricks),
     Drift = RW(Bricks ~ drift()),
     Mean = MEAN(Bricks)
   )
@@ -524,5 +517,8 @@ brick_fc |>
 # Lab Session 11
 ## Lab Session 11
 
- * Produce forecasts using an appropriate benchmark method for student enrolments in Australia (as shown yesterday). Plot the results using `autoplot()`.
- * Produce forecasts using an appropriate benchmark method for total Australian retail turnover (aggregate `aus_retail`). Plot the results using `autoplot()`.
+Produce forecasts using an appropriate benchmark method, and plot the results using `autoplot()` for the following time series:
+ 
+1. Total in-school staff in Australia (`staff`)
+2. Preschool and School education payroll jobs (`payroll_education`)
+3. Total Australian retail turnover (aggregate `aus_retail`)

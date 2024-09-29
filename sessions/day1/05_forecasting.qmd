@@ -15,8 +15,10 @@ image: "nicole-avagliano-TeLjs2pL5fA-unsplash.jpg"
 
 ## Lab sessions
 
-### Lab Session 11
+### Lab Session 9
 
-
- * Produce forecasts using an appropriate benchmark method for student enrolments in Australia (as shown yesterday). Plot the results using `autoplot()`.
- * Produce forecasts using an appropriate benchmark method for Australian takeaway food turnover (`aus_retail`). Plot the results using `autoplot()`.
+Produce forecasts using an appropriate benchmark method, and plot the results using `autoplot()` for the following time series:
+ 
+1. Total in-school staff in Australia (`staff`)
+2. Preschool and School education payroll jobs (`payroll_education`)
+3. Total Australian retail turnover (aggregate `aus_retail`)

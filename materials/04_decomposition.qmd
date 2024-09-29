@@ -66,40 +66,38 @@ where & $y_t=$ & data at period $t$ \\
   *  Take logs to get multiplicative decomposition.
   *  Use Box-Cox transformations to get other decompositions.
 
-## US Retail Employment
+## Tertiary education payroll
 \fontsize{11}{11}\sf
 
-```{r usretail}
-us_retail_employment <- us_employment |>
-  filter(year(Month) >= 1990, Title == "Retail Trade") |>
-  select(-Series_ID)
-us_retail_employment
+```{r tertiary}
+tertiary_payroll <- payroll_education |>
+  filter(Industry == "Tertiary Education")
+tertiary_payroll
 ```
 
 \vspace*{10cm}
 
-## US Retail Employment
+## Tertiary education payroll
 
 ```{r dable1}
-us_retail_employment |>
-  autoplot(Employed) +
-  labs(y = "Persons (thousands)", title = "Total employment in US retail")
+tertiary_payroll |>
+  autoplot(Jobs)
 ```
 
 \vspace*{10cm}
 
-## US Retail Employment
+## Tertiary education payroll
 \fontsize{11}{11}\sf
 
 ```{r dable2}
-dcmp <- us_retail_employment |>
-  model(stl = STL(Employed))
+dcmp <- tertiary_payroll |>
+  model(stl = STL(Jobs))
 dcmp
 ```
 
 \vspace*{10cm}
 
-## US Retail Employment
+## Tertiary education payroll
 \fontsize{11}{11}\sf
 
 ```{r dable3}
@@ -108,27 +106,27 @@ components(dcmp)
 
 \vspace*{10cm}
 
-## US Retail Employment
+## Tertiary education payroll
 
-```{r usretail-stl, fig.width=8, fig.height=4}
+```{r tertiary-stl, fig.width=8, fig.height=4}
 components(dcmp) |> autoplot()
 ```
 
 ## US Retail Employment
 
 ```{r dable4, fig.height=2.7}
-us_retail_employment |>
-  autoplot(Employed, color = "gray") +
+tertiary_payroll |>
+  autoplot(Jobs, color = "gray") +
   autolayer(components(dcmp), trend, color = "#D55E00") +
   labs(y = "Persons (thousands)", title = "Total employment in US retail")
 ```
 
 \vspace*{10cm}
 
-## US Retail Employment
+## Tertiary education payroll
 
-```{r usretail3}
-components(dcmp) |> gg_subseries(season_year)
+```{r tertiary3}
+components(dcmp) |> gg_season(season_year)
 ```
 
 ## Seasonal adjustment
@@ -139,13 +137,12 @@ $$y_t - S_t = T_t + R_t$$
   *  Multiplicative decomposition: seasonally adjusted data given by
 $$y_t / S_t = T_t \times R_t$$
 
-## US Retail Employment
+## Tertiary education payroll
 
 ```{r usretail-sa, fig.height=2.7}
-us_retail_employment |>
-  autoplot(Employed, color = "gray") +
-  autolayer(components(dcmp), season_adjust, color = "#0072B2") +
-  labs(y = "Persons (thousands)", title = "Total employment in US retail")
+tertiary_payroll |>
+  autoplot(Jobs, color = "gray") +
+  autolayer(components(dcmp), season_adjust, color = "#0072B2")
 ```
 
 ## Seasonal adjustment
@@ -156,38 +153,9 @@ us_retail_employment |>
 
 ## STL decomposition
 
-```{r stlwindowanim, echo=FALSE, warning=FALSE, message=FALSE, fig.show='animate', interval=1/10,  fig.height=5.35, fig.width=8, aniopts='controls,buttonsize=0.3cm,width=11.5cm', eval=TRUE}
-s_windows <- seq(5, 55, by = 2)
-stl_defs <- purrr::map(s_windows, function(s_window) {
-  STL(Employed ~ season(window = s_window), robust = TRUE)
-})
-names(stl_defs) <- sprintf("season(window=%02d)", s_windows)
-
-us_retail_employment |>
-  model(!!!stl_defs) |>
-  components() |>
-  as_tibble() |>
-  pivot_longer(Employed:remainder,
-    names_to = "component", names_ptypes = list(component = factor(levels = c("Employed", "trend", "season_year", "remainder"))),
-    values_to = "Employed"
-  ) |>
-  ggplot(aes(x = Month, y = Employed)) +
-  geom_line() +
-  facet_grid(rows = vars(component), scales = "free_y") +
-  labs(
-    title = "STL decomposition of US retail employment",
-    subtitle = "{closest_state}"
-  ) +
-  transition_states(.model)
-```
-
-\vspace*{10cm}
-
-## STL decomposition
-
 ```{r echo = TRUE, results = 'hide'}
-us_retail_employment |>
-  model(STL(Employed ~ trend(window = 15) + season(window = "periodic"),
+tertiary_payroll |>
+  model(STL(Jobs ~ trend(window = 15) + season(window = "periodic"),
     robust = TRUE
   )) |>
   components()
@@ -195,15 +163,15 @@ us_retail_employment |>
 
 \fontsize{12}{13}\sf
 
-  *  `trend(window = ?)` controls wiggliness of trend component.
+  *  `trend(window = ?)` controls variation of trend component.
   *  `season(window = ?)` controls variation on seasonal component.
   *  `season(window = 'periodic')` is equivalent to an infinite window.
 
 ## STL decomposition
 
 ```{r mstl, fig.width=8.5, fig.height=3.4}
-us_retail_employment |>
-  model(STL(Employed)) |>
+tertiary_payroll |>
+  model(STL(Jobs)) |>
   components() |>
   autoplot()
 ```
@@ -220,14 +188,14 @@ us_retail_employment |>
 ## STL decomposition
 \fontsize{13}{15}\sf
 
-* Algorithm that updates trend and seasonal components iteratively.
+* Smooths trend and seasonal components iteratively.
 * Starts with $\hat{T}_t=0$
 * Uses a mixture of loess and moving averages to successively refine the trend and seasonal estimates.
 * trend window controls loess bandwidth on deasonalised values.
 * season window controls loess bandwidth on detrended subseries.
 * Robustness weights based on remainder.
 * Default season: `window = 13`
-* Default trend:\newline\mbox{}\hfill `window = nextodd(ceiling((1.5*period)/(1-(1.5/s.window)))`
+* Default trend: `window = nextodd(ceiling((1.5*period)/(1-(1.5/s.window))))`
 * `window` values should be odd numbers for symmetry.
 
 ## Australian holidays
