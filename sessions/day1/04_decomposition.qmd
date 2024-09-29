@@ -1,5 +1,5 @@
 ---
-title: "Seasonality and trends"
+title: "Decomposing patterns"
 subtitle: "<span class='code'>14:15-15:00</span>"
 date: "2024-10-01"
 image: "chris-lawton-5IHz5WhosQE-unsplash.jpg"
