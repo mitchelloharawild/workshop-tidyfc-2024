@@ -21,11 +21,11 @@ Consider the GDP information in `global_economy`. Plot the GDP per capita for ea
 
 ### Lab Session 7
 
-1. For the following series, find an appropriate Box-Cox transformation in order to stabilise the variance.
 
-    * United States GDP from `global_economy`
-    * Slaughter of Victorian “Bulls, bullocks and steers” in `aus_livestock`
-    * Victorian Electricity Demand from `vic_elec`.
-    * Gas production from `aus_production`
+1. For the following series, find an appropriate transformation in order to stabilise the variance.
+
+  * Number of arrivals to Australia from NZ (`aus_arrivals`)
+  * Total full-time students (`students`)
+  * Total full-time students aged 15-24 in Australia (`student_labour`)
 
 2. Why is a Box-Cox transformation unhelpful for the `canadian_gas` data?

@@ -15,31 +15,44 @@ image: "isaac-smith-AT77Q0Njnt0-unsplash.jpg"
 
 ## Lab sessions
 
-### Lab Session 3
+## Lab Session 3
 
-1. Look at the quarterly tourism data for the Snowy Mountains
-
-    ```r
-    snowy <- tourism |> filter(Region == "Snowy Mountains")
-    ```
-
-    - Use `autoplot()`, `gg_season()` and `gg_subseries()` to explore the data.
-    - What do you learn?
-
-2. Produce a calendar plot for the `pedestrian` data from one location and one year.
+1. Create time plots of the total school students and staff.
+2. Create time plots of the total students and staff by state.
+3. Use ggplot2 to create a time plot from scratch, complete with labels.
 
 ### Lab Session 4
 
-We have introduced the following functions: `gg_lag` and `ACF`. Use these functions to explore the four time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `Close` price of Amazon from `gafa_stock`, `Demand` from `vic_elec`. Can you spot any seasonality, cyclicity and trend? What do you learn about the series?
+1. Look at the monthly labour force of 15-24 year olds by State/Territory and educational attendance (6202.0 table 16).
+
+   The code to prepare this data is in `student_labour.R`.
+
+2. Use `autoplot()`, `gg_season()` and `gg_subseries()` to explore the data.
+
+   Look at different aggregations of the data, for example total persons by
+   attendance.
+   
+3. What do you learn?
+
+### Lab Session 4
+
+Explore the `ACF()` of the following time series:
+
+1. Education payroll (`payroll_education`)
+2. Total full-time students (`students`)
+3. Total working students aged 15-24 in ACT (`student_labour`)
+
+Can you spot any seasonality, cyclicity and trend? What do you learn about the series?
 
 ### Lab Session 5
 
-Calculate the difference in ACT student enrolments, it can be done as follows:
+Plot the difference in ACT student enrolments, it can be done as follows:
 
 ```{r, eval = FALSE}
 students |>
-  filter(State == "ACT") |>
-  mutate(diff = difference(Count))
+  filter(`State/Territory` == "ACT") |>
+  summarise(total = sum(`All Full-time and Part-time Student count`)) |> 
+  autoplot(difference(total))
 ```
 
-Does `diff` look like white noise?
+Does `diff` look like white noise? Hint: Check the ACF

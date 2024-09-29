@@ -28,73 +28,152 @@ format:
 source("setup.R")
 ```
 
+# Workshop data
+
+## Workshop data
+
+<https://workshop.nectric.com.au/tidyfc2024/labs.zip>
+
+Download this ZIP to access all the tidied data.
+
+Open the project by double-clicking 'tidyfc-exercises.Rproj'.
+
+
+::: {.callout-note}
+
+## Alternatively...
+
+```r
+usethis::use_course("https://workshop.nectric.com.au/tidyfc2024/labs.zip")
+```
+
+:::
 
 # Time plots
+
 ## Time plots
-\fontsize{10}{11}\sf
 
-```{r maxtemp, fig.height=2.4}
-maxtemp <- vic_elec |>
-  index_by(Day = date(Time)) |>
-  summarise(Temperature = max(Temperature))
-maxtemp |>
-  autoplot(Temperature) +
-  labs(y = "Max temperature")
+Time plots are the simplest and most common visualisation for time series data (you've certainly seen these before!).
+
+For this we put time on the x-axis and plot the measurements on the y-axis. We can make this plot easily with ggplot2, or with the `data |> autoplot(y)` helper function.
+
+:::{.callout-tip}
+## Overplotting beware
+
+When working with many time series it's easy to over plot.
+
+Filter or aggregate the data before plotting.
+:::
+
+## Recall the internet vacancies dataset
+
+\fontsize{10}{10}\sf
+```{r}
+library(readxl)
+anzsco_categories <- read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  filter(Level == 2) |> 
+  distinct(ANZSCO_CODE, Title)
+read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories - August 2024.xlsx", sheet = 1) |> 
+  # Tidy into a long form
+  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies") |> 
+  mutate(month = yearmonth(as.Date(as.integer(month), origin = "1900-01-01"))) |> 
+  # Remove aggregates
+  filter(Level == 3, State != "AUST") |> 
+  # Add level 2 category information
+  mutate(ANZSCO_CODE_CAT = substr(ANZSCO_CODE, 1, 1)) |> 
+  left_join(anzsco_categories, by = c("ANZSCO_CODE_CAT" = "ANZSCO_CODE"), suffix = c("", "_CAT")) |> 
+  select(ANZSCO_CODE, Title_CAT, Title, State, month, vacancies) |> 
+  # Convert to a tsibble
+  as_tsibble(
+    key = c(Title_CAT, Title, State),
+    index = month
+  ) -> internet_vacancies
 ```
 
-## Ansett airlines
+## Time plots
 
-\full{ansettlogo}
-
-## Ansett airlines
-\fontsize{11}{12}\sf
-
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  autoplot(Passengers)
+```{r}
+internet_vacancies |> 
+  filter(Title == "Education Professionals") |> 
+  autoplot(vacancies)
 ```
 
-## Ansett airlines
-\fontsize{11}{12}\sf
 
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  filter(Class == "Economy") |>
-  autoplot(Passengers)
+## Time plots
+
+Time plots help show the main changes in the data over time.
+
+Here we can look for:
+
+* Trend
+* Seasonality
+* Cycles
+* Outliers
+
+. . .
+
+:::{.callout-note}
+## Story of time
+
+Discuss overall patterns across time and highlight specific points in time which are interesting.
+:::
+
+## Time plots
+
+```{r}
+internet_vacancies |> 
+  filter(Title == "Education Professionals") |> 
+  autoplot(vacancies) + 
+  scale_y_log10()
 ```
 
-## Ansett airlines
-\fontsize{11}{12}\sf
+# Lab Session 3
+## Lab Session 3
 
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  filter(Airports == "MEL-SYD") |>
-  autoplot(Passengers)
-```
+1. Create time plots of the total school students and staff.
 
-## Ansett airlines
-\fontsize{11}{12}\sf
+   Hint: You'll need to aggregate the data first.
+2. Create time plots of the total students and staff by state.
+3. Use ggplot2 to create a time plot from scratch, complete with labels.
 
-```{r, echo=TRUE, fig.height=3.1}
-ansett |>
-  filter(Airports == "MEL-SYD") |>
-  autoplot(Passengers)
-```
+::: {.callout-note}
+## Finished early?
 
-\begin{textblock}{2.5}(12.6,7.3)
-\begin{alertblock}{}
-Not the real data! Or is it?
-\end{alertblock}
-\end{textblock}
+Try combining the student and staff datasets to create a time plot which
+directly compares the number of students and staff.
+:::
 
-# Lab Session 2
-## Lab Session 2
-
-- Create time plots of the following four time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `Close` from `gafa_stock`, `Demand` from `vic_elec`.
-- Use `help()` to find out about the data in each series.
-- For the last plot, modify the axis labels and title.
 
 # Seasonal plots
+
+## Seasonal plots
+
+```{r}
+#| fig-height: 3
+payroll_education <- readabs::read_payrolls("subindustry_jobs") |> 
+  filter(industry_division == "P-Education & training") |> 
+  transmute(Industry = industry_subdivision, Week = yearweek(date), Jobs = value) |> 
+  as_tsibble(index = Week, key = Industry)
+payroll_education |> 
+  autoplot(Jobs)
+```
+
+## Seasonal plots
+
+:::{.callout-note}
+## Ups and downs (peaks and troughs)
+
+When is the seasonal maximum and minimum?
+
+:::
+
+```{r}
+#| echo: false
+#| fig-height: 3
+payroll_education |> 
+  autoplot(Jobs)
+```
+
 
 ## Seasonal plots
 
@@ -102,6 +181,15 @@ Not the real data! Or is it?
   * Something like a time plot except that the data from each season are overlapped.
   * Enables the underlying seasonal pattern to be seen more clearly, and also allows any substantial departures from the seasonal pattern to be easily identified.
   * In R: `gg_season()`
+  
+  
+## Seasonal plots
+
+```{r}
+payroll_education |> 
+  gg_season(Jobs)
+```
+
 
 ## Quarterly Australian Beer Production
 
@@ -180,20 +268,21 @@ prettify(p1,
 ```{r sugrrants2, ref.label="sugrrants", echo=FALSE, out.height="90%", fig.height=5.4, fig.width=9}
 ```
 
-# Lab Session 3
-## Lab Session 3
+# Lab Session 4
+## Lab Session 4
 
-1. Look at the quarterly tourism data for the Snowy Mountains
+1. Look at the monthly labour force of 15-24 year olds by State/Territory and educational attendance.
 
-    ```r
-    snowy <- tourism |>
-      filter(Region == "Snowy Mountains")
-    ```
+   Data is sourced from the ABS 6202.0 Table 16.
 
-    - Use `autoplot()`, `gg_season()` and `gg_subseries()` to explore the data.
-    - What do you learn?
+   The code to prepare this data is in `student_labour.R`.
 
-2. Produce a calendar plot for the `pedestrian` data from one location and one year.
+2. Use `autoplot()`, `gg_season()` and `gg_subseries()` to explore the data.
+
+   Look at different aggregations of the data, for example total persons by
+   attendance.
+   
+3. What do you learn?
 
 # Seasonal or cyclic?
 
@@ -350,10 +439,16 @@ new_production |>
 \fontsize{9}{10}\sf
 
 ```{r students}
-students <- readxl::read_excel("https://www.abs.gov.au/statistics/people/education/schools/2023/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx", sheet = 3, skip = 4) |> 
-  group_by(Year, State = substring(`State/Territory`, 3)) |> 
-  summarise(Count = sum(`All Full-time and Part-time Student count`), .groups = "drop") |> 
-  as_tsibble(index = Year, key = State)
+students <- readxl::read_excel("data/schools/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx", sheet = 3, skip = 4) |> 
+  # Group by Year and all the character variables
+  group_by(Year, across(where(is.character), identity)) |> 
+  # Add up the duplicate rows
+  summarise(across(ends_with("count"), sum), .groups = "drop") |> 
+  # Convert to a tsibble
+  as_tsibble(
+    key = where(is.character),
+    index = Year
+  )
 ```
 
 ```{r, echo=FALSE}
@@ -388,43 +483,43 @@ students |> ACF(Count) |> autoplot()
 - When data are seasonal, the autocorrelations will be larger at the seasonal lags (i.e., at multiples of the seasonal frequency)
 - When data are trended and seasonal, you see a combination of these effects.
 
-## US retail trade employment
+## Youth labour force
 
 ```{r}
-retail <- us_employment |>
-  filter(Title == "Retail Trade", year(Month) >= 1980)
-retail |> autoplot(Employed)
+student_labour |> 
+  summarise(persons = sum(persons)) |> 
+  autoplot(persons)
 ```
 
 ## US retail trade employment
 
 ```{r}
-retail |>
-  ACF(Employed, lag_max = 48) |>
+student_labour |> 
+  summarise(persons = sum(persons)) |>
+  ACF(persons, lag_max = 48) |>
   autoplot()
 ```
 
-## Google stock price
+## In-school staff
 \fontsize{10}{11}\sf
 
-```{r google-2015}
-google_2015 <- gafa_stock |>
-  filter(Symbol == "GOOG", year(Date) == 2015) |>
-  select(Date, Close)
-google_2015
+```{r staff-total}
+staff_total <- staff |> 
+  summarise(`In-School Staff Count` = sum(`In-School Staff Count`))
+staff_total
 ```
 
 ## Google stock price
 
 ```{r}
-google_2015 |> autoplot(Close)
+staff_total |> autoplot(`In-School Staff Count`)
 ```
 
 ## Google stock price
 
 ```{r}
-google_2015 |>
-  ACF(Close, lag_max = 100) |>
+staff_total |>
+  ACF(`In-School Staff Count`, lag_max = 100) |>
   autoplot()
 ```
 
@@ -432,7 +527,13 @@ google_2015 |>
 
 ## Lab Session 4
 
-We have introduced the following functions: `gg_lag` and `ACF`. Use these functions to explore the four time series: `Bricks` from `aus_production`, `Lynx` from `pelt`, `Close` price of Amazon from `gafa_stock`, `Demand` from `vic_elec`. Can you spot any seasonality, cyclicity and trend? What do you learn about the series?
+Explore the `ACF()` of the following time series:
+
+1. Education payroll (`payroll_education`)
+2. Total full-time students (`students`)
+3. Total working students aged 15-24 in ACT (`student_labour`)
+
+Can you spot any seasonality, cyclicity and trend? What do you learn about the series?
 
 ## Which is which?
 
@@ -552,16 +653,17 @@ These show the series is **not a white noise series**.
 # Lab Session 5
 ## Lab Session 5
 
-Calculate the difference in ACT student enrolments, it can be done as follows:
+Plot the difference in ACT student enrolments, it can be done as follows:
 
 \fontsize{10.5}{13}\sf
 
 ```{r, eval = FALSE}
 students |>
-  filter(State == "ACT") |>
-  mutate(diff = difference(Count))
+  filter(`State/Territory` == "ACT") |>
+  summarise(total = sum(`All Full-time and Part-time Student count`)) |> 
+  autoplot(difference(total))
 ```
 
 \fontsize{14}{16}\sf
 
-Does `diff` look like white noise?
+Does `diff` look like white noise? Hint: Check the ACF
