@@ -33,6 +33,50 @@ melsyd <- tsibbledata::ansett |>
   filter(Airports == "MEL-SYD")
 ```
 
+# Forecasting recap
+
+## Tidy time series data
+
+Use `as_tsibble()` to convert a dataset into a tsibble.
+
+Identify which column(s) are:
+
+* The `index` variable
+* Identifying `key` variable(s)
+* Measured variable(s)
+
+## Visualising time series
+
+* Time plot: `data |> autoplot(y)`
+* Season plot: `data |> gg_season(y)`
+* Seasonal subseries plot: `data |> gg_subseries(y)`
+* Lag plot: `data |> gg_lag(y)`
+* ACF plot: `data |> ACF(y) |> autoplot()`
+
+## Transformations and decompositions
+
+Simplify patterns with transformations:
+
+* Population and inflation adjustments
+* Mathematical transformations (`log()`, `sqrt()`, `box_cox()`)
+
+Separate trend and seasonal patterns with decomposition:
+
+* `STL()` decomposition (additive, choose windows)
+* Extract decomposition with `components()`
+* Produce seasonally adjusted data for decision making
+
+## Forecasting basics
+
+Estimate a model on data with `model()`
+
+Benchmark forecasting methods:
+
+* Simple average: `MEAN(y)`
+* Naive method: `NAIVE(y)`
+* Seasonal naive method: `SNAIVE(y)`
+* RW w/ drift: `RW(y ~ drift())`
+
 # Residual diagnostics
 
 ## Fitted values
