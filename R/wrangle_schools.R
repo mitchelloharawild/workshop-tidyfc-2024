@@ -1,10 +1,6 @@
 library(tidyverse)
 library(fpp3)
 
-readxl::read_excel("data/schools/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx", sheet = 2, skip = 11)
-
-
-readxl::excel_sheets("data/schools/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx")
 students <- readxl::read_excel("data/schools/Table 42b Number of Full-time and Part-time Students - 2006-2023.xlsx", sheet = 3, skip = 4)
 
 students |> 
@@ -31,3 +27,13 @@ teacher_ratio |>
 readxl::excel_sheets("data/schools/Table 50a In-school Staff (Number), 2006-2023.xlsx")
 
 staff <- readxl::read_excel("data/schools/Table 50a In-school Staff (Number), 2006-2023.xlsx", sheet = 3, skip = 4)
+
+staff |> 
+  as_tsibble(index = Year,
+             key = where(is.character))
+
+staff |> 
+  group_by(Year, `Affiliation 2`) |> 
+  summarise(staff = sum(`In-School Staff Count`)) |> 
+  ggplot(aes(x = Year, y = staff)) + 
+  geom_line(aes(colour = `Affiliation 2`))
