@@ -3,6 +3,8 @@ project:
   resources:
     - "images/twitter-card.png"
     - "materials/*.pdf"
+    - "slides.zip"
+    - "labs.zip"
   render:
     - "*.qmd"
     - "!materials"
@@ -38,16 +40,16 @@ website:
       - icon: download
         text: Downloads
         menu: 
-          # - text: Everything
-          #   href: 'https://github.com/mitchelloharawild/workshop-dept-education-2024/archive/refs/heads/main.zip'
+          - text: Everything
+            href: 'https://github.com/mitchelloharawild/workshop-tidyfc-2024/archive/refs/heads/main.zip'
           - text: Slides
             href: 'slides.zip'
-          # - text: Lab sessions
-          #   href: 'labs.zip'
+          - text: Lab sessions
+            href: 'labs.zip'
       - icon: file-certificate
         href: license.qmd
-      # - icon: github
-      #   href: https://github.com/mitchelloharawild/workshop-dept-education-2024
+      - icon: github
+        href: https://github.com/mitchelloharawild/workshop-tidyfc-2024
     left:
       - text: Sessions
         menu: 
