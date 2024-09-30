@@ -241,13 +241,18 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="lab-sessions">Lab sessions</h2>
 <section id="lab-session-12" class="level3">
 <h3 class="anchored" data-anchor-id="lab-session-12">Lab Session 12</h3>
-<p>Try forecasting the Chinese GDP from the <code>global_economy</code> data set using an ETS model.</p>
+<p>Try forecasting the Australian GDP from the <code>global_economy</code> data set using an ETS model.</p>
 <p>Experiment with the various options in the <code>ETS()</code> function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.</p>
 <p>[Hint: use <code>h=20</code> when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]</p>
 </section>
 <section id="lab-session-13" class="level3">
 <h3 class="anchored" data-anchor-id="lab-session-13">Lab Session 13</h3>
-<p>Find an ETS model for the Gas data from <code>aus_production</code> and forecast the next few years.</p>
+<p>Find an ETS model for the total full-time students aged 15-24 in Australia (<code>student_labour</code>).</p>
+<ul>
+<li>Is an additive or multiplicative seasonality appropriate?</li>
+<li>Does the seasonal component update fast enough to capture the minimimum school leaving change in 2013?</li>
+</ul>
+<p>Find an ETS model for the Gas data from <code>aus_production</code>.</p>
 <ul>
 <li>Why is multiplicative seasonality necessary here?</li>
 <li>Experiment with making the trend damped. Does it improve the forecasts?</li>

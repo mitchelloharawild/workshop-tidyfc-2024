@@ -233,8 +233,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#lab-sessions" id="toc-lab-sessions" class="nav-link active" data-scroll-target="#lab-sessions">Lab sessions</a>
   <ul class="collapse">
-  <li><a href="#lab-session-16" id="toc-lab-session-16" class="nav-link" data-scroll-target="#lab-session-16">Lab Session 16</a></li>
-  <li><a href="#lab-session-17" id="toc-lab-session-17" class="nav-link" data-scroll-target="#lab-session-17">Lab Session 17</a></li>
+  <li><a href="#lab-session-14" id="toc-lab-session-14" class="nav-link" data-scroll-target="#lab-session-14">Lab Session 14</a></li>
+  <li><a href="#lab-session-15" id="toc-lab-session-15" class="nav-link" data-scroll-target="#lab-session-15">Lab Session 15</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/edit/main/sessions/day2/08_arima.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -273,31 +273,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="../../materials/08_arima.pdf">View slides in full screen</a></p>
 <section id="lab-sessions" class="level2">
 <h2 class="anchored" data-anchor-id="lab-sessions">Lab sessions</h2>
-<section id="lab-session-16" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-16">Lab Session 16</h3>
-<p>For the Australian job vacancies:</p>
+<section id="lab-session-14" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-14">Lab Session 14</h3>
+<p>For the total number of students in Government, Catholic, and Independent schools:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>skill_vacancies <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">"data/Internet Vacancies, ANZSCO Skill Level, States and Territories - May 2024.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tidy into a long form</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">matches</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">d{5}"</span>), <span class="at">names_to =</span> <span class="st">"month"</span>, <span class="at">values_to =</span> <span class="st">"vacancies"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_transform =</span> <span class="fu">list</span>(<span class="at">month =</span> <span class="sc">~</span> <span class="fu">yearmonth</span>(<span class="fu">as.Date</span>(<span class="fu">as.integer</span>(.), <span class="at">origin =</span> <span class="st">"1900-01-01"</span>)))) <span class="sc">|&gt;</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove aggregate vacancies</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(State <span class="sc">!=</span> <span class="st">"AUST"</span>, Skill_level <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to tsibble</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tsibble</span>(<span class="at">key =</span> <span class="fu">c</span>(State, Skill_level), <span class="at">index =</span> month)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>enrolment_affiliation <span class="ot">&lt;-</span> students <span class="sc">|&gt;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Affiliation (Gov/Cath/Ind)</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">enrolments =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">All Full-time and Part-time Student count</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Fit a suitable ARIMA model (including possible transformation) for the data.</li>
 <li>Produce forecasts of your fitted model. Do the forecasts look reasonable?</li>
 </ul>
 </section>
-<section id="lab-session-17" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-17">Lab Session 17</h3>
-<p>For the Australian tourism data (from <code>tourism</code>):</p>
+<section id="lab-session-15" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-15">Lab Session 15</h3>
+<p>Find an ARIMA model for the each school attendance type for people aged 15-24 in Australia (<code>student_labour</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>youth_learning <span class="ot">&lt;-</span> student_labour <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(attendance) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">persons =</span> <span class="fu">sum</span>(persons))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ul>
-<li>Fit a suitable ARIMA model for all data.</li>
+<li>Fit suitable ARIMA models for each time series.</li>
 <li>Produce forecasts of your fitted models.</li>
-<li>Check the forecasts for the “Snowy Mountains” and “Melbourne” regions. Do they look reasonable?</li>
+<li>Check the forecasts for each of the school <code>attendance</code> category, do they look reasonable?</li>
 </ul>
 
 

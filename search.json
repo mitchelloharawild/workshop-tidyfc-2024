@@ -1,17 +1,17 @@
 [
   {
-    "objectID": "sessions/day2/09_dynreg.html",
-    "href": "sessions/day2/09_dynreg.html",
-    "title": "Dynamic regression",
+    "objectID": "sessions/day2/08_arima.html",
+    "href": "sessions/day2/08_arima.html",
+    "title": "ARIMA models",
     "section": "",
     "text": "View slides in full screen"
   },
   {
-    "objectID": "sessions/day2/09_dynreg.html#lab-sessions",
-    "href": "sessions/day2/09_dynreg.html#lab-sessions",
-    "title": "Dynamic regression",
+    "objectID": "sessions/day2/08_arima.html#lab-sessions",
+    "href": "sessions/day2/08_arima.html#lab-sessions",
+    "title": "ARIMA models",
     "section": "Lab sessions",
-    "text": "Lab sessions\n\nLab Session 18\nRepeat the daily electricity example, but instead of using a quadratic function of temperature, use a piecewise linear function with the “knot” around 20 degrees Celsius (use predictors Temperature & Temp2). How can you optimize the choice of knot?\nThe data can be created as follows.\n\nvic_elec_daily &lt;- vic_elec |&gt;\n  filter(year(Time) == 2014) |&gt;\n  index_by(Date = date(Time)) |&gt;\n  summarise(\n    Demand = sum(Demand)/1e3,\n    Temperature = max(Temperature),\n    Holiday = any(Holiday)\n  ) |&gt;\n  mutate(\n    Temp2 = I(pmax(Temperature-20,0)),\n    Day_Type = case_when(\n      Holiday ~ \"Holiday\",\n      wday(Date) %in% 2:6 ~ \"Weekday\",\n      TRUE ~ \"Weekend\"\n    )\n  )\n\n\n\nLab Session 19\nRepeat Lab Session 18 but using all available data, and handling the annual seasonality using Fourier terms."
+    "text": "Lab sessions\n\nLab Session 14\nFor the total number of students in Government, Catholic, and Independent schools:\n\nenrolment_affiliation &lt;- students |&gt; \n  group_by(`Affiliation (Gov/Cath/Ind)`) |&gt; \n  summarise(enrolments = sum(`All Full-time and Part-time Student count`))\n\n\nFit a suitable ARIMA model (including possible transformation) for the data.\nProduce forecasts of your fitted model. Do the forecasts look reasonable?\n\n\n\nLab Session 15\nFind an ARIMA model for the each school attendance type for people aged 15-24 in Australia (student_labour).\n\nyouth_learning &lt;- student_labour |&gt; \n  group_by(attendance) |&gt; \n  summarise(persons = sum(persons))\n\n\nFit suitable ARIMA models for each time series.\nProduce forecasts of your fitted models.\nCheck the forecasts for each of the school attendance category, do they look reasonable?"
   },
   {
     "objectID": "sessions/day1/02_graphics.html",
@@ -158,14 +158,14 @@
     "href": "schedule.html",
     "title": "Schedule",
     "section": "",
-    "text": "Schedule subject to change\n\n\n\nThis schedule is planned to be updated to better align with the training needs of the Department of Education. The schedule below is for the standard 2-day forecasting workshop.\nSome topics will be reduced or removed to make time for multivariate econometric modelling."
+    "text": "Time\n\n\nSession\n\n\n\n\n\n\n\n\n\n09:00-09:30\n\n\nBackground\n\n\n\n\n\n\n\n09:30-10:30\n\n\nIntroduction to tsibbles\n\n\n\n\n\n\n\n10:30-11:00\n\n\nQ&A Break\n\n\n\n\n\n\n\n11:00-12:30\n\n\nTime series graphics\n\n\n\n\n\n\n\n12:30-13:30\n\n\nLunch Break\n\n\n\n\n\n\n\n13:30-14:15\n\n\nTransformations\n\n\n\n\n\n\n\n14:15-15:00\n\n\nDecomposing patterns\n\n\n\n\n\n\n\n15:00-15:30\n\n\nQ&A Break\n\n\n\n\n\n\n\n15:30-17:00\n\n\nForecasting basics\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "schedule.html#day-1",
     "href": "schedule.html#day-1",
     "title": "Schedule",
-    "section": "Day 1",
-    "text": "Day 1\n\n\n\n\n\n\n\nTime\n\n\nSession\n\n\n\n\n\n\n\n\n\n09:00-09:30\n\n\nBackground\n\n\n\n\n\n\n\n09:30-10:30\n\n\nIntroduction to tsibbles\n\n\n\n\n\n\n\n10:30-11:00\n\n\nQ&A Break\n\n\n\n\n\n\n\n11:00-12:30\n\n\nTime series graphics\n\n\n\n\n\n\n\n12:30-13:30\n\n\nLunch Break\n\n\n\n\n\n\n\n13:30-14:15\n\n\nTransformations\n\n\n\n\n\n\n\n14:15-15:00\n\n\nDecomposing patterns\n\n\n\n\n\n\n\n15:00-15:30\n\n\nQ&A Break\n\n\n\n\n\n\n\n15:30-17:00\n\n\nForecasting basics\n\n\n\n\n\nNo matching items"
+    "section": "",
+    "text": "Time\n\n\nSession\n\n\n\n\n\n\n\n\n\n09:00-09:30\n\n\nBackground\n\n\n\n\n\n\n\n09:30-10:30\n\n\nIntroduction to tsibbles\n\n\n\n\n\n\n\n10:30-11:00\n\n\nQ&A Break\n\n\n\n\n\n\n\n11:00-12:30\n\n\nTime series graphics\n\n\n\n\n\n\n\n12:30-13:30\n\n\nLunch Break\n\n\n\n\n\n\n\n13:30-14:15\n\n\nTransformations\n\n\n\n\n\n\n\n14:15-15:00\n\n\nDecomposing patterns\n\n\n\n\n\n\n\n15:00-15:30\n\n\nQ&A Break\n\n\n\n\n\n\n\n15:30-17:00\n\n\nForecasting basics\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "schedule.html#day-2",
@@ -242,7 +242,7 @@
     "href": "sessions/day2/07_ets.html#lab-sessions",
     "title": "Exponential smoothing",
     "section": "Lab sessions",
-    "text": "Lab sessions\n\nLab Session 12\nTry forecasting the Chinese GDP from the global_economy data set using an ETS model.\nExperiment with the various options in the ETS() function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.\n[Hint: use h=20 when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]\n\n\nLab Session 13\nFind an ETS model for the Gas data from aus_production and forecast the next few years.\n\nWhy is multiplicative seasonality necessary here?\nExperiment with making the trend damped. Does it improve the forecasts?"
+    "text": "Lab sessions\n\nLab Session 12\nTry forecasting the Australian GDP from the global_economy data set using an ETS model.\nExperiment with the various options in the ETS() function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.\n[Hint: use h=20 when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]\n\n\nLab Session 13\nFind an ETS model for the total full-time students aged 15-24 in Australia (student_labour).\n\nIs an additive or multiplicative seasonality appropriate?\nDoes the seasonal component update fast enough to capture the minimimum school leaving change in 2013?\n\nFind an ETS model for the Gas data from aus_production.\n\nWhy is multiplicative seasonality necessary here?\nExperiment with making the trend damped. Does it improve the forecasts?"
   },
   {
     "objectID": "sessions/template.html",
@@ -259,17 +259,17 @@
     "text": "Lab sessions"
   },
   {
-    "objectID": "sessions/day2/08_arima.html",
-    "href": "sessions/day2/08_arima.html",
-    "title": "ARIMA models",
+    "objectID": "sessions/day2/09_dynreg.html",
+    "href": "sessions/day2/09_dynreg.html",
+    "title": "Dynamic regression",
     "section": "",
     "text": "View slides in full screen"
   },
   {
-    "objectID": "sessions/day2/08_arima.html#lab-sessions",
-    "href": "sessions/day2/08_arima.html#lab-sessions",
-    "title": "ARIMA models",
+    "objectID": "sessions/day2/09_dynreg.html#lab-sessions",
+    "href": "sessions/day2/09_dynreg.html#lab-sessions",
+    "title": "Dynamic regression",
     "section": "Lab sessions",
-    "text": "Lab sessions\n\nLab Session 16\nFor the Australian job vacancies:\n\nskill_vacancies &lt;- readxl::read_excel(\"data/Internet Vacancies, ANZSCO Skill Level, States and Territories - May 2024.xlsx\", sheet = 2) |&gt; \n  # Tidy into a long form\n  pivot_longer(matches(\"\\\\d{5}\"), names_to = \"month\", values_to = \"vacancies\",\n               names_transform = list(month = ~ yearmonth(as.Date(as.integer(.), origin = \"1900-01-01\")))) |&gt; \n  # Remove aggregate vacancies\n  filter(State != \"AUST\", Skill_level != 0) |&gt; \n  # Convert to tsibble\n  as_tsibble(key = c(State, Skill_level), index = month)\n\n\nFit a suitable ARIMA model (including possible transformation) for the data.\nProduce forecasts of your fitted model. Do the forecasts look reasonable?\n\n\n\nLab Session 17\nFor the Australian tourism data (from tourism):\n\nFit a suitable ARIMA model for all data.\nProduce forecasts of your fitted models.\nCheck the forecasts for the “Snowy Mountains” and “Melbourne” regions. Do they look reasonable?"
+    "text": "Lab sessions\n\nLab Session 18\nRepeat the daily electricity example, but instead of using a quadratic function of temperature, use a piecewise linear function with the “knot” around 20 degrees Celsius (use predictors Temperature & Temp2). How can you optimize the choice of knot?\nThe data can be created as follows.\n\nvic_elec_daily &lt;- vic_elec |&gt;\n  filter(year(Time) == 2014) |&gt;\n  index_by(Date = date(Time)) |&gt;\n  summarise(\n    Demand = sum(Demand)/1e3,\n    Temperature = max(Temperature),\n    Holiday = any(Holiday)\n  ) |&gt;\n  mutate(\n    Temp2 = I(pmax(Temperature-20,0)),\n    Day_Type = case_when(\n      Holiday ~ \"Holiday\",\n      wday(Date) %in% 2:6 ~ \"Weekday\",\n      TRUE ~ \"Weekend\"\n    )\n  )\n\n\n\nLab Session 19\nRepeat Lab Session 18 but using all available data, and handling the annual seasonality using Fourier terms."
   }
 ]
