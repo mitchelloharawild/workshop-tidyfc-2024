@@ -233,8 +233,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#lab-sessions" id="toc-lab-sessions" class="nav-link active" data-scroll-target="#lab-sessions">Lab sessions</a>
   <ul class="collapse">
-  <li><a href="#lab-session-18" id="toc-lab-session-18" class="nav-link" data-scroll-target="#lab-session-18">Lab Session 18</a></li>
-  <li><a href="#lab-session-19" id="toc-lab-session-19" class="nav-link" data-scroll-target="#lab-session-19">Lab Session 19</a></li>
+  <li><a href="#lab-session-16" id="toc-lab-session-16" class="nav-link" data-scroll-target="#lab-session-16">Lab Session 16</a></li>
+  <li><a href="#lab-session-17" id="toc-lab-session-17" class="nav-link" data-scroll-target="#lab-session-17">Lab Session 17</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/edit/main/sessions/day2/09_dynreg.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -273,32 +273,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="../../materials/09_dynreg.pdf">View slides in full screen</a></p>
 <section id="lab-sessions" class="level2">
 <h2 class="anchored" data-anchor-id="lab-sessions">Lab sessions</h2>
-<section id="lab-session-18" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-18">Lab Session 18</h3>
-<p>Repeat the daily electricity example, but instead of using a quadratic function of temperature, use a piecewise linear function with the “knot” around 20 degrees Celsius (use predictors <code>Temperature</code> &amp; <code>Temp2</code>). How can you optimize the choice of knot?</p>
-<p>The data can be created as follows.</p>
+<section id="lab-session-16" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-16">Lab Session 16</h3>
+<p>Produce forecasts of preschool and school education jobs from the ABS payroll data (<code>payroll_education</code>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>vic_elec_daily <span class="ot">&lt;-</span> vic_elec <span class="sc">|&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">year</span>(Time) <span class="sc">==</span> <span class="dv">2014</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">index_by</span>(<span class="at">Date =</span> <span class="fu">date</span>(Time)) <span class="sc">|&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Demand =</span> <span class="fu">sum</span>(Demand)<span class="sc">/</span><span class="fl">1e3</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Temperature =</span> <span class="fu">max</span>(Temperature),</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Holiday =</span> <span class="fu">any</span>(Holiday)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Temp2 =</span> <span class="fu">I</span>(<span class="fu">pmax</span>(Temperature<span class="dv">-20</span>,<span class="dv">0</span>)),</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Day_Type =</span> <span class="fu">case_when</span>(</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      Holiday <span class="sc">~</span> <span class="st">"Holiday"</span>,</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">wday</span>(Date) <span class="sc">%in%</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span> <span class="sc">~</span> <span class="st">"Weekday"</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Weekend"</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>payroll_education <span class="sc">|&gt;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Industry <span class="sc">==</span> <span class="st">"Preschool and School Education"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<ol type="1">
+<li>Estimate a TSLM model with appropriate regression terms (trend, fourier harmonics, …)</li>
+<li>Produce and visualise forecasts from this model</li>
+<li>Perform residual diagnostic checks on the model</li>
+<li>Instead use dynamic harmonic regression</li>
+<li>Do the residuals and forecasts look better?</li>
+</ol>
 </section>
-<section id="lab-session-19" class="level3">
-<h3 class="anchored" data-anchor-id="lab-session-19">Lab Session 19</h3>
-<p>Repeat Lab Session 18 but using all available data, and handling the annual seasonality using Fourier terms.</p>
+<section id="lab-session-17" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-17">Lab Session 17</h3>
+<p>Consider the total school students aged 15-19 in Australia.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>working_age_school_students <span class="ot">&lt;-</span> student_labour <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(attendance <span class="sc">==</span> <span class="st">"Attending school (aged 15-19 years)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">persons =</span> <span class="fu">sum</span>(persons))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>working_age_school_students <span class="sc">|&gt;</span> <span class="fu">autoplot</span>(persons)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What if the 2013 policy was later reverted, what would you expect the forecasts to be?</p>
+<ol type="1">
+<li><p>Produce forecasts from a scenario in which this policy was reverted in 2030.</p>
+<p>Hint: Use <code>new_data()</code> to create the future time points, and <code>mutate()</code> a date comparison to create the future dummy variable values.</p></li>
+<li><p>Visualise the forecasts, are they realistic?</p></li>
+</ol>
 
 
 </section>

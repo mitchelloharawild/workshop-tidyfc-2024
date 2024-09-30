@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://workshop.nectric.com.au/deptedu2024/sessions/day2/08_arima.html</loc>
-    <lastmod>2024-09-30T02:47:06.639Z</lastmod>
+    <loc>https://workshop.nectric.com.au/deptedu2024/sessions/day2/09_dynreg.html</loc>
+    <lastmod>2024-09-30T12:26:11.548Z</lastmod>
   </url>
   <url>
     <loc>https://workshop.nectric.com.au/deptedu2024/sessions/day1/02_graphics.html</loc>
@@ -78,14 +78,14 @@
   </url>
   <url>
     <loc>https://workshop.nectric.com.au/deptedu2024/sessions/day2/07_ets.html</loc>
-    <lastmod>2024-09-30T01:46:08.194Z</lastmod>
+    <lastmod>2024-09-30T11:53:55.858Z</lastmod>
   </url>
   <url>
     <loc>https://workshop.nectric.com.au/deptedu2024/sessions/template.html</loc>
     <lastmod>2024-09-17T16:02:51.743Z</lastmod>
   </url>
   <url>
-    <loc>https://workshop.nectric.com.au/deptedu2024/sessions/day2/09_dynreg.html</loc>
-    <lastmod>2024-09-17T16:02:51.743Z</lastmod>
+    <loc>https://workshop.nectric.com.au/deptedu2024/sessions/day2/08_arima.html</loc>
+    <lastmod>2024-09-30T11:54:39.404Z</lastmod>
   </url>
 </urlset>

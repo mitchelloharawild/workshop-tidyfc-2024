@@ -1,17 +1,17 @@
 [
   {
-    "objectID": "sessions/day2/08_arima.html",
-    "href": "sessions/day2/08_arima.html",
-    "title": "ARIMA models",
+    "objectID": "sessions/day2/09_dynreg.html",
+    "href": "sessions/day2/09_dynreg.html",
+    "title": "Dynamic regression",
     "section": "",
     "text": "View slides in full screen"
   },
   {
-    "objectID": "sessions/day2/08_arima.html#lab-sessions",
-    "href": "sessions/day2/08_arima.html#lab-sessions",
-    "title": "ARIMA models",
+    "objectID": "sessions/day2/09_dynreg.html#lab-sessions",
+    "href": "sessions/day2/09_dynreg.html#lab-sessions",
+    "title": "Dynamic regression",
     "section": "Lab sessions",
-    "text": "Lab sessions\n\nLab Session 14\nFor the total number of students in Government, Catholic, and Independent schools:\n\nenrolment_affiliation &lt;- students |&gt; \n  group_by(`Affiliation (Gov/Cath/Ind)`) |&gt; \n  summarise(enrolments = sum(`All Full-time and Part-time Student count`))\n\n\nFit a suitable ARIMA model (including possible transformation) for the data.\nProduce forecasts of your fitted model. Do the forecasts look reasonable?\n\n\n\nLab Session 15\nFind an ARIMA model for the each school attendance type for people aged 15-24 in Australia (student_labour).\n\nyouth_learning &lt;- student_labour |&gt; \n  group_by(attendance) |&gt; \n  summarise(persons = sum(persons))\n\n\nFit suitable ARIMA models for each time series.\nProduce forecasts of your fitted models.\nCheck the forecasts for each of the school attendance category, do they look reasonable?"
+    "text": "Lab sessions\n\nLab Session 16\nProduce forecasts of preschool and school education jobs from the ABS payroll data (payroll_education).\n\npayroll_education |&gt; \n  filter(Industry == \"Preschool and School Education\")\n\n\nEstimate a TSLM model with appropriate regression terms (trend, fourier harmonics, …)\nProduce and visualise forecasts from this model\nPerform residual diagnostic checks on the model\nInstead use dynamic harmonic regression\nDo the residuals and forecasts look better?\n\n\n\nLab Session 17\nConsider the total school students aged 15-19 in Australia.\n\nworking_age_school_students &lt;- student_labour |&gt; \n  filter(attendance == \"Attending school (aged 15-19 years)\") |&gt; \n  summarise(persons = sum(persons))\nworking_age_school_students |&gt; autoplot(persons)\n\nWhat if the 2013 policy was later reverted, what would you expect the forecasts to be?\n\nProduce forecasts from a scenario in which this policy was reverted in 2030.\nHint: Use new_data() to create the future time points, and mutate() a date comparison to create the future dummy variable values.\nVisualise the forecasts, are they realistic?"
   },
   {
     "objectID": "sessions/day1/02_graphics.html",
@@ -242,7 +242,7 @@
     "href": "sessions/day2/07_ets.html#lab-sessions",
     "title": "Exponential smoothing",
     "section": "Lab sessions",
-    "text": "Lab sessions\n\nLab Session 12\nTry forecasting the Australian GDP from the global_economy data set using an ETS model.\nExperiment with the various options in the ETS() function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.\n[Hint: use h=20 when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]\n\n\nLab Session 13\nFind an ETS model for the total full-time students aged 15-24 in Australia (student_labour).\n\nIs an additive or multiplicative seasonality appropriate?\nDoes the seasonal component update fast enough to capture the minimimum school leaving change in 2013?\n\nFind an ETS model for the Gas data from aus_production.\n\nWhy is multiplicative seasonality necessary here?\nExperiment with making the trend damped. Does it improve the forecasts?"
+    "text": "Lab sessions\n\nLab Session 12\nTry forecasting the Australian GDP from the global_economy data set using an ETS model.\nExperiment with the various options in the ETS() function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.\n[Hint: use h=20 when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]\n\n\nLab Session 13\nFind an ETS model for the total full-time students aged 15-24 in Australia (student_labour).\n\nIs an additive or multiplicative seasonality appropriate?\nDoes the seasonal component update fast enough to capture the change in 2013?\n\nFind an ETS model for the Gas data from aus_production.\n\nWhy is multiplicative seasonality necessary here?\nExperiment with making the trend damped. Does it improve the forecasts?"
   },
   {
     "objectID": "sessions/template.html",
@@ -259,17 +259,17 @@
     "text": "Lab sessions"
   },
   {
-    "objectID": "sessions/day2/09_dynreg.html",
-    "href": "sessions/day2/09_dynreg.html",
-    "title": "Dynamic regression",
+    "objectID": "sessions/day2/08_arima.html",
+    "href": "sessions/day2/08_arima.html",
+    "title": "ARIMA models",
     "section": "",
     "text": "View slides in full screen"
   },
   {
-    "objectID": "sessions/day2/09_dynreg.html#lab-sessions",
-    "href": "sessions/day2/09_dynreg.html#lab-sessions",
-    "title": "Dynamic regression",
+    "objectID": "sessions/day2/08_arima.html#lab-sessions",
+    "href": "sessions/day2/08_arima.html#lab-sessions",
+    "title": "ARIMA models",
     "section": "Lab sessions",
-    "text": "Lab sessions\n\nLab Session 18\nRepeat the daily electricity example, but instead of using a quadratic function of temperature, use a piecewise linear function with the “knot” around 20 degrees Celsius (use predictors Temperature & Temp2). How can you optimize the choice of knot?\nThe data can be created as follows.\n\nvic_elec_daily &lt;- vic_elec |&gt;\n  filter(year(Time) == 2014) |&gt;\n  index_by(Date = date(Time)) |&gt;\n  summarise(\n    Demand = sum(Demand)/1e3,\n    Temperature = max(Temperature),\n    Holiday = any(Holiday)\n  ) |&gt;\n  mutate(\n    Temp2 = I(pmax(Temperature-20,0)),\n    Day_Type = case_when(\n      Holiday ~ \"Holiday\",\n      wday(Date) %in% 2:6 ~ \"Weekday\",\n      TRUE ~ \"Weekend\"\n    )\n  )\n\n\n\nLab Session 19\nRepeat Lab Session 18 but using all available data, and handling the annual seasonality using Fourier terms."
+    "text": "Lab sessions\n\nLab Session 14\nFor the total number of students in Government, Catholic, and Independent schools:\n\nenrolment_affiliation &lt;- students |&gt; \n  group_by(`Affiliation (Gov/Cath/Ind)`) |&gt; \n  summarise(enrolments = sum(`All Full-time and Part-time Student count`))\n\n\nFit a suitable ARIMA model (including possible transformation) for the data.\nProduce forecasts of your fitted model. Do the forecasts look reasonable?\n\n\n\nLab Session 15\nFind an ARIMA model for the each school attendance type for people aged 15-24 in Australia (student_labour).\n\nyouth_learning &lt;- student_labour |&gt; \n  group_by(attendance) |&gt; \n  summarise(persons = sum(persons))\n\n\nFit suitable ARIMA models for each time series.\nProduce forecasts of your fitted models.\nCheck the forecasts for each of the school attendance category, do they look reasonable?"
   }
 ]
