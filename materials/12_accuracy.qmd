@@ -16,6 +16,14 @@ format:
     keep-tex: false
 ---
 
+## Acknowledgement of Country
+
+I would like to acknowledge the Ngunnawal people, the Traditional Custodians of the land on which we are meeting and also the Wurundjeri people of the Kulin Nation from where I come.
+
+I recognize and respect their deep and enduring connection to this land, water, and community and pay my respects to their Elders past and present.
+
+\placefig{10}{0.05}{width=3.5cm}{flags}
+
 ## Outline
 
 \vspace*{0.7cm}\tableofcontents
