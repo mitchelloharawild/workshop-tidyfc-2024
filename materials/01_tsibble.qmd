@@ -482,13 +482,20 @@ read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories
 ::: {.callout-tip}
 ## ABS aggregates
 
-Data from the ABS often mixes aggregate values into the data.
+Data from the ABS often mixes aggregate values into the data - this is an untidy data pattern which can cause errors when computing your own aggregations. 
 
-This is done inconsistently ("Total", "AUST", etc.) and isn't tidy.
+\vspace{0.3em}
 
-To work with aggregates in tidy data analysis, we prefer to compute them ourselves with `group_by()` and `summarise()`. 
+These mistakes can be tricky to spot because:
+
+* names of these aggregates are inconsistent ("Total", "AUST", etc.)
+* more than one type of aggregate can exist in the same column
+
+
 :::
 
+
+## Removing the aggregates
 
 \fontsize{10}{10}\sf
 ```{r}

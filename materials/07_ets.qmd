@@ -443,7 +443,7 @@ Optimize parameters and initial values using MLE.
 Find an ETS model for the total full-time students aged 15-24 in Australia (`student_labour`).
 
   * Is an additive or multiplicative seasonality appropriate?
-  * Does the seasonal component update fast enough to capture the minimimum school leaving change in 2013?
+  * Does the seasonal component update fast enough to capture the change in 2013?
 
 Find an ETS model for the Gas data from `aus_production`.
 

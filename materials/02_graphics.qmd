@@ -93,6 +93,7 @@ read_excel("data/Internet Vacancies, ANZSCO2 Occupations, States and Territories
 ## Time plots
 
 ```{r}
+#| fig-height: 3.5
 internet_vacancies |> 
   filter(Title == "Education Professionals") |> 
   autoplot(vacancies)
@@ -121,6 +122,7 @@ Discuss overall patterns across time and highlight specific points in time which
 ## Time plots
 
 ```{r}
+#| fig-height: 3
 internet_vacancies |> 
   filter(Title == "Education Professionals") |> 
   autoplot(vacancies) + 
