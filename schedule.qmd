@@ -33,15 +33,6 @@ tbl-colwidths: [5,20,50,25]
 editor: source
 ---
 
-
-:::{.callout-warning}
-## Schedule subject to change
-
-This schedule is planned to be updated to better align with the training needs of the Department of Education. The schedule below is for the standard 2-day forecasting workshop.
-
-Some topics will be reduced or removed to make time for multivariate econometric modelling.
-:::
-
 ## Day 1
 
 ::: {#day1}
