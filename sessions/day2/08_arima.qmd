@@ -15,29 +15,32 @@ image: "jason-richard-Qsq9eW5C0TA-unsplash.jpg"
 
 ## Lab sessions
 
-### Lab Session 16
+### Lab Session 14
 
-For the Australian job vacancies:
 
-```{r, eval = FALSE}
-skill_vacancies <- readxl::read_excel("data/Internet Vacancies, ANZSCO Skill Level, States and Territories - May 2024.xlsx", sheet = 2) |> 
-  # Tidy into a long form
-  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies",
-               names_transform = list(month = ~ yearmonth(as.Date(as.integer(.), origin = "1900-01-01")))) |> 
-  # Remove aggregate vacancies
-  filter(State != "AUST", Skill_level != 0) |> 
-  # Convert to tsibble
-  as_tsibble(key = c(State, Skill_level), index = month)
+For the total number of students in Government, Catholic, and Independent schools:
+
+```{r}
+#| eval: false
+enrolment_affiliation <- students |> 
+  group_by(`Affiliation (Gov/Cath/Ind)`) |> 
+  summarise(enrolments = sum(`All Full-time and Part-time Student count`))
 ```
-
 
  * Fit a suitable ARIMA model (including possible transformation) for the data.
  * Produce forecasts of your fitted model. Do the forecasts look reasonable?
 
-### Lab Session 17
+### Lab Session 15
 
-For the Australian tourism data (from `tourism`):
+Find an ARIMA model for the each school attendance type for people aged 15-24 in Australia (`student_labour`).
 
- * Fit a suitable ARIMA model for all data.
+```{r}
+#| eval: false
+youth_learning <- student_labour |> 
+  group_by(attendance) |> 
+  summarise(persons = sum(persons))
+```
+  
+ * Fit suitable ARIMA models for each time series.
  * Produce forecasts of your fitted models.
- * Check the forecasts for the "Snowy Mountains" and "Melbourne" regions. Do they look reasonable?
+ * Check the forecasts for each of the school `attendance` category, do they look reasonable?

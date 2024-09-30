@@ -427,20 +427,23 @@ griddf |>
   guides(alpha = FALSE)
 ```
 
-# Lab Session 16
-## Lab Session 16
+# Lab Session 14
+## Lab Session 14
 
-For the Australian job vacancies:
+For the total number of students in Government, Catholic, and Independent schools:
 
-```{r, eval = FALSE}
-skill_vacancies <- readxl::read_excel("data/Internet Vacancies, ANZSCO Skill Level, States and Territories - May 2024.xlsx", sheet = 2) |> 
-  # Tidy into a long form
-  pivot_longer(matches("\\d{5}"), names_to = "month", values_to = "vacancies",
-               names_transform = list(month = ~ yearmonth(as.Date(as.integer(.), origin = "1900-01-01")))) |> 
-  # Remove aggregate vacancies
-  filter(State != "AUST", Skill_level != 0) |> 
-  # Convert to tsibble
-  as_tsibble(key = c(State, Skill_level), index = month)
+```{r}
+enrolment_affiliation <- students |> 
+  group_by(`Affiliation (Gov/Cath/Ind)`) |> 
+  summarise(enrolments = sum(`All Full-time and Part-time Student count`))
+```
+```{r}
+#| include: false
+
+enrolment_affiliation |> 
+  model(ARIMA(enrolments)) |>
+  forecast(h = "10 years") |>
+  autoplot(enrolment_affiliation)
 ```
 
 
@@ -468,100 +471,126 @@ skill_vacancies <- readxl::read_excel("data/Internet Vacancies, ANZSCO Skill Lev
 ###
 Seasonal and non-seasonal terms combine multiplicatively
 
-## Cortecosteroid drug sales
+## Cortecosteroid medication subsidies
 
 ```{r, echo=TRUE}
-h02 <- PBS |>
+cortecosteroid_subsidies <- PBS |>
   filter(ATC2 == "H02") |>
   summarise(Cost = sum(Cost) / 1e6)
 ```
 
-## Cortecosteroid drug sales
+## Cortecosteroid medication subsidies
 
 ```{r, echo=TRUE}
-h02 |> autoplot(
+cortecosteroid_subsidies |> autoplot(
   Cost
 )
 ```
 
-## Cortecosteroid drug sales
+## Cortecosteroid medication subsidies
 
 ```{r, echo=TRUE}
-h02 |> autoplot(
+cortecosteroid_subsidies |> autoplot(
   log(Cost)
 )
 ```
 
-## Cortecosteroid drug sales
+## Cortecosteroid medication subsidies
 
 ```{r, echo=TRUE}
-h02 |> autoplot(
+cortecosteroid_subsidies |> autoplot(
   log(Cost) |> difference(12)
 )
 ```
 
-## Cortecosteroid drug sales
+## Cortecosteroid medication subsidies
 
 ```{r, echo=TRUE}
-h02 |> autoplot(
+cortecosteroid_subsidies |> autoplot(
   log(Cost) |> difference(12) |> difference(1)
 )
 ```
 
-## Example: US electricity production
-\fontsize{11}{12}\sf
-
-```{r h02fit, echo=TRUE, fig.height=2.8}
-h02 |>
-  model(arima = ARIMA(log(Cost))) |>
-  report()
-```
-
-## Example: US electricity production
-\fontsize{11}{13}\sf
-
-```{r h02fcst, echo=TRUE, fig.height=2.8}
-h02 |>
-  model(arima = ARIMA(log(Cost))) |>
-  forecast(h = "3 years") |>
-  autoplot(h02)
-```
-
-\vspace*{5cm}
-
-## Cortecosteroid drug sales
+## Cortecosteroid medication subsidies
 \fontsize{9}{9}\sf
 
 ```{r h02tryharder, echo=TRUE, fig.height=3.6}
-fit <- h02 |>
+fit <- cortecosteroid_subsidies |>
   model(best = ARIMA(log(Cost),
     stepwise = FALSE,
     approximation = FALSE,
-    order_constraint = p + q + P + Q <= 9
+    order_constraint = p + q + P + Q <= 8
   ))
 report(fit)
 ```
 
-## Cortecosteroid drug sales
+## Cortecosteroid medication subsidies
 \fontsize{11}{14}\sf
 
 ```{r h02f, echo=TRUE, fig.height=2.8}
 fit |>
   forecast() |>
-  autoplot(h02) +
-  labs(y = "H02 Expenditure ($AUD)", x = "Year")
+  autoplot(cortecosteroid_subsidies) +
+  labs(y = "Cortecosteroid Expenditure ($AUD)", x = "Year")
 ```
 
-# Lab Session 17
-## Lab Session 17
+# Lab Session 15
+## Lab Session 15
 
-For the Australian tourism data (from `tourism`):
+Find an ARIMA model for the each school attendance type for people aged 15-24 in Australia (`student_labour`).
 
- * Fit a suitable ARIMA model for all data.
+```{r}
+youth_learning <- student_labour |> 
+  group_by(attendance) |> 
+  summarise(persons = sum(persons))
+```
+  
+ * Fit suitable ARIMA models for each time series.
  * Produce forecasts of your fitted models.
- * Check the forecasts for the "Snowy Mountains" and "Melbourne" regions. Do they look reasonable?
+ * Check the forecasts for each of the school `attendance` category, do they look reasonable?
+
+```{r}
+#| include: false
+
+youth_learning |> 
+  model(ARIMA(persons)) |> 
+  forecast(h = "4 years") |> 
+  autoplot(youth_learning)
+```
+
 
 # Forecast ensembles
+
+## Is ARIMA or ETS best?
+
+. . .
+
+It depends!
+
+. . .
+
+::: {.callout-note}
+## Capturing patterns
+
+* Both handle time varying trends and seasonality.
+* ETS directly captures multiplicative patterns.
+* ARIMA can forecast cyclical patterns.
+:::
+
+
+## Is ARIMA or ETS best?
+
+It depends!
+
+::: {.callout-tip .fragment .fade-in}
+## Evaluate accuracy
+
+We can determine which model works best on a specific dataset using accuracy evaluation.
+:::
+
+. . .
+
+Or, combine them with ensembles!
 
 ## Forecast ensembles
 \fontsize{10}{11}\sf
@@ -587,7 +616,7 @@ fit <- train |>
 \fontsize{10}{11}\sf
 
 ```{r trainfc, dependson='trainall'}
-#| fig-height: 3.6
+#| fig-height: 3
 fc <- fit |> forecast(h = "3 years")
 fc |>
   filter(Region == "Snowy Mountains", Purpose == "Holiday") |>
@@ -608,23 +637,55 @@ accuracy(fc, tourism) |>
   arrange(RMSE)
 ```
 
+
+
 ## Forecast ensembles
-\fontsize{13}{15}\sf
+\fontsize{10}{11}\sf
 
-\begin{alertblock}{}\bfseries Can we do better than equal weights?\end{alertblock}\pause\vspace*{-0.3cm}
+```{r trainall2, echo=TRUE, dependson='tourism'}
+train <- student_labour |>
+  filter(month <= yearmonth("2021 Aug"))
+fit <- train |>
+  model(
+    ets = ETS(persons),
+    arima = ARIMA(persons),
+    snaive = SNAIVE(persons)
+  ) |>
+  mutate(mixed = (ets + arima + snaive) / 3)
+```
 
- * Hard to find weights that improve forecast accuracy.
- * Known as the "forecast combination puzzle".
- * Solution:  FFORMA
+\fontsize{13}{14}\sf
 
-\pause
+ * Ensemble forecast `mixed` is a simple average of the three fitted models.
+ *  `forecast()` will produce distributional forecasts taking into account the correlations between the forecast errors of the component models.
 
-\begin{block}{\fontsize{13}{14}\sf\textbf{FFORMA (Feature-based FORecast Model Averaging)}}
-\begin{itemize}
-\item Vector of time series features used to predict best weights.
-\item A modification of xgboost is used.
-\item Method came 2nd in the 2018 M4 international forecasting competition.
-\item Main author: Pablo Montero-Manso (now Uni Sydney)
-\item Not (yet) available for fable.
-\end{itemize}
-\end{block}
+## Forecast ensembles
+\fontsize{10}{11}\sf
+
+```{r trainfc2, dependson='trainall'}
+#| fig-height: 2.5
+fc <- fit |> forecast(h = "3 years")
+fc |>
+  filter(
+    state == "Australian Capital Territory",
+    attendance == "Attending full-time education",
+    status == "Employed full-time"
+  ) |>
+  autoplot(student_labour |> filter(month >= yearmonth("2010 Jan")), level = NULL)
+```
+
+## Forecast ensembles
+\fontsize{10}{11}\sf
+
+```{r ensemble-acc-2, dependson='trainfc'}
+accuracy(fc, student_labour) |>
+  group_by(.model) |>
+  summarise(
+    RMSE = mean(RMSE),
+    MAE = mean(MAE),
+    MASE = mean(MASE)
+  ) |>
+  arrange(RMSE)
+```
+
+
