@@ -15,17 +15,22 @@ image: "wil-stewart--m9PKhID7Nk-unsplash.jpg"
 
 ## Lab sessions
 
-### Lab Session 14
+### Lab Session 12
 
-Try forecasting the Chinese GDP from the `global_economy` data set using an ETS model.
+Try forecasting the Australian GDP from the `global_economy` data set using an ETS model.
 
 Experiment with the various options in the `ETS()` function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.
 
 [Hint: use `h=20` when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]
 
-### Lab Session 15
+### Lab Session 13
 
-Find an ETS model for the Gas data from `aus_production` and forecast the next few years.
+Find an ETS model for the total full-time students aged 15-24 in Australia (`student_labour`).
+
+  * Is an additive or multiplicative seasonality appropriate?
+  * Does the seasonal component update fast enough to capture the minimimum school leaving change in 2013?
+
+Find an ETS model for the Gas data from `aus_production`.
 
   * Why is multiplicative seasonality necessary here?
   * Experiment with making the trend damped. Does it improve the forecasts?

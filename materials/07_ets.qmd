@@ -168,9 +168,8 @@ where $\varepsilon_t\sim\text{NID}(0,\sigma^2)$.\pause
 
 ```{r holt-fit, echo=TRUE}
 aus_economy <- global_economy |>
-  filter(Country == "Australia") |>
-  mutate(Pop = Population / 1e6)
-fit <- aus_economy |> model(AAN = ETS(Pop))
+  filter(Country == "Australia")
+fit <- aus_economy |> model(AAN = ETS(Population))
 report(fit)
 ```
 
@@ -224,7 +223,7 @@ fit |>
 
 ```{r, echo=TRUE, fig.height=3.4}
 aus_economy |>
-  model(holt = ETS(Pop ~ trend("Ad"))) |>
+  model(holt = ETS(Population ~ trend("Ad"))) |>
   forecast(h = 20) |>
   autoplot(aus_economy)
 ```
@@ -235,8 +234,7 @@ aus_economy |>
 
 ```{r popfit, echo=TRUE}
 fit <- global_economy |>
-  mutate(Pop = Population / 1e6) |>
-  model(ets = ETS(Pop))
+  model(ets = ETS(Population))
 fit
 ```
 
@@ -248,8 +246,8 @@ fit |>
   forecast(h = 5)
 ```
 
-# Lab Session 14
-## Lab Session 14
+# Lab Session 12
+## Lab Session 12
 
 Try forecasting the Australian GDP from the `global_economy` data set using an ETS model.
 
@@ -438,9 +436,14 @@ Optimize parameters and initial values using MLE.
 * Method performed very well in M3 competition.
 * Used as a benchmark in the M4 competition.
 
-# Lab Session 15
+# Lab Session 13
 
-## Lab Session 15
+## Lab Session 13
+
+Find an ETS model for the total full-time students aged 15-24 in Australia (`student_labour`).
+
+  * Is an additive or multiplicative seasonality appropriate?
+  * Does the seasonal component update fast enough to capture the minimimum school leaving change in 2013?
 
 Find an ETS model for the Gas data from `aus_production`.
 
@@ -502,6 +505,15 @@ if (!identical(fabletools:::model_sum(fit$ets[[1]]), "ETS(A,A,A)")) {
 ```{r}
 fc |> autoplot(vic_cafe)
 ```
+
+
+## Bootstrapped forecast distributions
+\fontsize{8.8}{9}\sf
+
+```{r}
+gg_tsresiduals(fit)
+```
+
 
 ## Bootstrapped forecast distributions
 \fontsize{8.8}{9}\sf
