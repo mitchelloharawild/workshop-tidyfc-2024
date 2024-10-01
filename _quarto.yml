@@ -5,6 +5,7 @@ project:
     - "materials/*.pdf"
     - "slides.zip"
     - "labs.zip"
+    - "labs/*.R"
   render:
     - "*.qmd"
     - "!materials"
@@ -36,7 +37,13 @@ website:
     background: "#426D98"
     pinned: true
     align: center
+    
     right:
+      - icon: code
+        text: Lab code
+        menu: 
+          - text: Day 1
+            href: 'labs/day1.R'
       - icon: download
         text: Downloads
         menu: 
