@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -205,8 +239,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lab-session-18" id="toc-lab-session-18" class="nav-link active" data-scroll-target="#lab-session-18">Lab Session 18</a></li>
+  <li><a href="#lab-session-19" id="toc-lab-session-19" class="nav-link" data-scroll-target="#lab-session-19">Lab Session 19</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/edit/main/sessions/day2/10_multivariate.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -240,8 +281,35 @@ ul.task-list li input[type="checkbox"] {
 <!-- Materials will be distributed sooner to the event. -->
 <embed src="../../materials/10_hierarchical.pdf" type="application/pdf" width="750px" height="420px">
 <p><a href="../../materials/11_multivariate.pdf">View slides in full screen</a></p>
+<section id="lab-session-18" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-18">Lab Session 18</h3>
+<p>Consider multivariate modelling of education staff affiliation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>staff_affiliation <span class="ot">&lt;-</span> staff <span class="sc">|&gt;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Affiliation 2</span><span class="st">`</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">In-School Staff Count</span><span class="st">`</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">`</span><span class="at">Affiliation 2</span><span class="st">`</span>, <span class="at">values_from =</span> Count)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="1">
+<li><p>Which model (VAR, VECM, or VARIMA) is most appropriate for this data?</p></li>
+<li><p>Estimate a suitable multivariate model for this relationship.</p></li>
+<li><p>Compute and visualise the impulse response functions.</p></li>
+<li><p>Produce and visualise forecasts from the model.</p></li>
+</ol>
+</section>
+<section id="lab-session-19" class="level3">
+<h3 class="anchored" data-anchor-id="lab-session-19">Lab Session 19</h3>
+<p>Produce coherent forecasts of the total number of students.</p>
+<ol type="1">
+<li><p>Produce aggregates of <code>students</code> by <code>State/Territory</code>, <code>Affiliation (Gov/Cath/Ind)</code> and <code>School Level</code>.</p></li>
+<li><p>Estimate automatic ETS models on data before 2020.</p></li>
+<li><p>Use optimal forecast reconciliation for these models.</p></li>
+<li><p>Produce and plot 4 years of coherent and base forecasts.</p></li>
+<li><p>Evaluate the test-set accuracy of these forecasts Are the coherent forecasts more accurate?</p></li>
+</ol>
 
 
+</section>
 
 </main> <!-- /main -->
 <!-- plausible --> 
@@ -674,7 +742,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/edit/main/sessions/day2/10_multivariate.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/edit/main/sessions/day2/10_multivariate.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/mitchelloharawild/workshop-dept-education-2024/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>© Copyright 2024, Nectric Pty Ltd</p>
 </div>

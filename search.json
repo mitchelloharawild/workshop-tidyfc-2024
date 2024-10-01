@@ -14,32 +14,25 @@
     "text": "Lab sessions\n\nLab Session 16\nProduce forecasts of preschool and school education jobs from the ABS payroll data (payroll_education).\n\npayroll_education |&gt; \n  filter(Industry == \"Preschool and School Education\")\n\n\nEstimate a TSLM model with appropriate regression terms (trend, fourier harmonics, …)\nProduce and visualise forecasts from this model\nPerform residual diagnostic checks on the model\nInstead use dynamic harmonic regression\nDo the residuals and forecasts look better?\n\n\n\nLab Session 17\nConsider the total school students aged 15-19 in Australia.\n\nworking_age_school_students &lt;- student_labour |&gt; \n  filter(attendance == \"Attending school (aged 15-19 years)\") |&gt; \n  summarise(persons = sum(persons))\nworking_age_school_students |&gt; autoplot(persons)\n\nWhat if the 2013 policy was later reverted, what would you expect the forecasts to be?\n\nProduce forecasts from a scenario in which this policy was reverted in 2030.\nHint: Use new_data() to create the future time points, and mutate() a date comparison to create the future dummy variable values.\nVisualise the forecasts, are they realistic?"
   },
   {
-    "objectID": "sessions/day1/02_graphics.html",
-    "href": "sessions/day1/02_graphics.html",
-    "title": "Time series graphics",
-    "section": "",
-    "text": "View slides in full screen"
-  },
-  {
-    "objectID": "sessions/day1/02_graphics.html#lab-sessions",
-    "href": "sessions/day1/02_graphics.html#lab-sessions",
-    "title": "Time series graphics",
-    "section": "Lab sessions",
-    "text": "Lab sessions"
-  },
-  {
-    "objectID": "sessions/day1/02_graphics.html#lab-session-3",
-    "href": "sessions/day1/02_graphics.html#lab-session-3",
-    "title": "Time series graphics",
-    "section": "Lab Session 3",
-    "text": "Lab Session 3\n\nCreate time plots of the total school students and staff.\nCreate time plots of the total students and staff by state.\nUse ggplot2 to create a time plot from scratch, complete with labels.\n\n\nLab Session 4\n\nLook at the monthly labour force of 15-24 year olds by State/Territory and educational attendance (6202.0 table 16).\nThe code to prepare this data is in student_labour.R.\nUse autoplot(), gg_season() and gg_subseries() to explore the data.\nLook at different aggregations of the data, for example total persons by attendance.\nWhat do you learn?\n\n\n\nLab Session 4\nExplore the ACF() of the following time series:\n\nEducation payroll (payroll_education)\nTotal full-time students (students)\nTotal working students aged 15-24 in ACT (student_labour)\n\nCan you spot any seasonality, cyclicity and trend? What do you learn about the series?\n\n\nLab Session 5\nPlot the difference in ACT student enrolments, it can be done as follows:\n\nstudents |&gt;\n  filter(`State/Territory` == \"ACT\") |&gt;\n  summarise(total = sum(`All Full-time and Part-time Student count`)) |&gt; \n  autoplot(difference(total))\n\nDoes diff look like white noise? Hint: Check the ACF"
-  },
-  {
     "objectID": "sessions/day2/10_multivariate.html",
     "href": "sessions/day2/10_multivariate.html",
     "title": "Multivariate modelling",
     "section": "",
+    "text": "View slides in full screen\n\nLab Session 18\nConsider multivariate modelling of education staff affiliation.\n\nstaff_affiliation &lt;- staff |&gt; \n  group_by(`Affiliation 2`) |&gt; \n  summarise(Count = sum(`In-School Staff Count`)) |&gt; \n  pivot_wider(names_from = `Affiliation 2`, values_from = Count)\n\n\nWhich model (VAR, VECM, or VARIMA) is most appropriate for this data?\nEstimate a suitable multivariate model for this relationship.\nCompute and visualise the impulse response functions.\nProduce and visualise forecasts from the model.\n\n\n\nLab Session 19\nProduce coherent forecasts of the total number of students.\n\nProduce aggregates of students by State/Territory, Affiliation (Gov/Cath/Ind) and School Level.\nEstimate automatic ETS models on data before 2020.\nUse optimal forecast reconciliation for these models.\nProduce and plot 4 years of coherent and base forecasts.\nEvaluate the test-set accuracy of these forecasts Are the coherent forecasts more accurate?"
+  },
+  {
+    "objectID": "sessions/template.html",
+    "href": "sessions/template.html",
+    "title": "{{title}}",
+    "section": "",
     "text": "View slides in full screen"
+  },
+  {
+    "objectID": "sessions/template.html#lab-sessions",
+    "href": "sessions/template.html#lab-sessions",
+    "title": "{{title}}",
+    "section": "Lab sessions",
+    "text": "Lab sessions"
   },
   {
     "objectID": "sessions/day2/06_accuracy.html",
@@ -53,7 +46,7 @@
     "href": "sessions/day2/06_accuracy.html#lab-sessions",
     "title": "Accuracy evaluation",
     "section": "Lab sessions",
-    "text": "Lab sessions\n\nLab Session 10\n\nUse RW w/ drift to model total student enrolments in Australia (students).\nTest if the residuals are white noise. What do you conclude?\n\n\n\nLab Session 11\n\nCreate a training set for employed Australian students (student_labour) by withholding the last four years as a test set.\nFit all the appropriate benchmark methods to the training set and forecast the periods covered by the test set.\nCompute the accuracy of your forecasts. Which method does best?"
+    "text": "Lab sessions\n\nLab Session 10\n\nUse RW w/ drift to model total student enrolments in Australia (students).\nCheck the residuals, is \\(\\varepsilon_t \\stackrel{iid}{\\sim} N(0,\\sigma^2)\\)?\nTest if the residuals are white noise. What do you conclude?\n\n\n\nLab Session 11\n\nCreate a training set for employed Australian students (student_labour) by withholding the last four years as a test set.\nFit all the appropriate benchmark methods to the training set and forecast the periods covered by the test set.\nCompute the accuracy of your forecasts. Which method does best?"
   },
   {
     "objectID": "sessions/day1/04_decomposition.html",
@@ -245,18 +238,25 @@
     "text": "Lab sessions\n\nLab Session 12\nTry forecasting the Australian GDP from the global_economy data set using an ETS model.\nExperiment with the various options in the ETS() function to see how much the forecasts change with damped trend, or with a Box-Cox transformation. Try to develop an intuition of what each is doing to the forecasts.\n[Hint: use h=20 when forecasting, so you can clearly see the differences between the various options when plotting the forecasts.]\n\n\nLab Session 13\nFind an ETS model for the total full-time students aged 15-24 in Australia (student_labour).\n\nIs an additive or multiplicative seasonality appropriate?\nDoes the seasonal component update fast enough to capture the change in 2013?\n\nFind an ETS model for the Gas data from aus_production.\n\nWhy is multiplicative seasonality necessary here?\nExperiment with making the trend damped. Does it improve the forecasts?"
   },
   {
-    "objectID": "sessions/template.html",
-    "href": "sessions/template.html",
-    "title": "{{title}}",
+    "objectID": "sessions/day1/02_graphics.html",
+    "href": "sessions/day1/02_graphics.html",
+    "title": "Time series graphics",
     "section": "",
     "text": "View slides in full screen"
   },
   {
-    "objectID": "sessions/template.html#lab-sessions",
-    "href": "sessions/template.html#lab-sessions",
-    "title": "{{title}}",
+    "objectID": "sessions/day1/02_graphics.html#lab-sessions",
+    "href": "sessions/day1/02_graphics.html#lab-sessions",
+    "title": "Time series graphics",
     "section": "Lab sessions",
     "text": "Lab sessions"
+  },
+  {
+    "objectID": "sessions/day1/02_graphics.html#lab-session-3",
+    "href": "sessions/day1/02_graphics.html#lab-session-3",
+    "title": "Time series graphics",
+    "section": "Lab Session 3",
+    "text": "Lab Session 3\n\nCreate time plots of the total school students and staff.\nCreate time plots of the total students and staff by state.\nUse ggplot2 to create a time plot from scratch, complete with labels.\n\n\nLab Session 4\n\nLook at the monthly labour force of 15-24 year olds by State/Territory and educational attendance (6202.0 table 16).\nThe code to prepare this data is in student_labour.R.\nUse autoplot(), gg_season() and gg_subseries() to explore the data.\nLook at different aggregations of the data, for example total persons by attendance.\nWhat do you learn?\n\n\n\nLab Session 4\nExplore the ACF() of the following time series:\n\nEducation payroll (payroll_education)\nTotal full-time students (students)\nTotal working students aged 15-24 in ACT (student_labour)\n\nCan you spot any seasonality, cyclicity and trend? What do you learn about the series?\n\n\nLab Session 5\nPlot the difference in ACT student enrolments, it can be done as follows:\n\nstudents |&gt;\n  filter(`State/Territory` == \"ACT\") |&gt;\n  summarise(total = sum(`All Full-time and Part-time Student count`)) |&gt; \n  autoplot(difference(total))\n\nDoes diff look like white noise? Hint: Check the ACF"
   },
   {
     "objectID": "sessions/day2/08_arima.html",

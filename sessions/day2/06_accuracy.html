@@ -68,6 +68,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <meta name="twitter:title" content="Accuracy evaluation – Tidy time series &amp; forecasting in R">
 <meta name="twitter:description" content="9:00-10:30">
@@ -256,6 +285,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="lab-session-10">Lab Session 10</h3>
 <ul>
 <li>Use RW w/ drift to model total student enrolments in Australia (<code>students</code>).</li>
+<li>Check the residuals, is <span class="math inline">\(\varepsilon_t \stackrel{iid}{\sim} N(0,\sigma^2)\)</span>?</li>
 <li>Test if the residuals are white noise. What do you conclude?</li>
 </ul>
 </section>
