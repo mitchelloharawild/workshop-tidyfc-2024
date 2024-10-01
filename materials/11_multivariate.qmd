@@ -31,29 +31,40 @@ source("setup.R")
 
 ## Multivariate modelling
 
-What is it?
+Multivariate models jointly describes the dynamic interrelationships between two or more measured variables. 
 
-* Multiple models?
-* Multiple time series?
-* Multiple variables!
+They are particularly useful for:
 
-## Multivariate modelling
+* understanding how variables influence each other over time
+* analysing causality and cointegration
+* investigating the effect of shocks in the system.
 
-Why it is useful?
 
-* Introduce the importance of modelling multiple time series together.
+<!-- ## School groups -->
 
-* Real-world applications (e.g., macroeconomic variables, financial data).
+<!-- ```{r} -->
+<!-- #| eval: false -->
+<!-- student_affiliation <- students |>  -->
+<!--   group_by(`Affiliation (Gov/Cath/Ind)`) |>  -->
+<!--   summarise(Count = sum(`All Full-time and Part-time Student count`)) |>  -->
+<!--   pivot_wider(names_from = `Affiliation (Gov/Cath/Ind)`, values_from = Count) -->
+<!-- student_affiliation |>  -->
+<!--   model(VARIMA(vars(Catholic, Government, Independent) ~ AR(3))) |>  -->
+<!--   forecast() |>  -->
+<!--   autoplot(student_affiliation) -->
+<!-- ``` -->
 
 # Vector Autoregression (VAR)
 
 ## Autoregression (AR)
 
-The AR($p$) model for a **univariate** time series $y_t$ is:
+Recall the AR($p$) model for a **univariate** time series $y_t$ is:
 
 $$
   y_t = a_1 y_{t-1} + a_2 y_{t-2} + \dots + a_p y_{t-p} + \varepsilon_t
 $$
+
+\fontsize{4}{14}\sf
 
 where:
 
@@ -62,26 +73,36 @@ where:
 - $p$ is the order of the AR process,
 - $\varepsilon_t$ is the white noise error term at time $t$.
 
+## Endogeneity
+
+Endogeneity occurs when an explanatory variable is correlated with the error term in a model. This can cause a 'feedback loop' in the model estimation which:
+
+* Leads to biased and inconsistent estimates.
+* Compromises hypothesis testing and forecasting.
+
+. . .
+
+Common Causes of endogeneity in time series include:
+
+* Simultaneity: Variables with bidirectional contemporaneous effects.
+* Omitted Variables: Missing relevant variables.
+* Measurement Errors: Inaccuracy in data collection.
+
 ## Cross correlations
 
 The Cross-Correlation Function (CCF) measures the correlation between two time series at different time lags.
 
-The CCF provides insight into how variables influence each other over time, suggesting the appropriate number of lags for the VAR model.
+It indicates the relationship between two variables over time.
 
-## Endogeneity
+```{r}
+#| fig-height: 2
+global_economy |> 
+  filter(Country == "Australia") |> 
+  CCF(Imports, Exports) |> 
+  autoplot()
+```
 
-Endogeneity occurs when an explanatory variable is correlated with the error term in a model.
 
-Endogeneity 
-
-* Leads to biased and inconsistent estimates in time series models.
-* Compromises the validity of hypothesis testing and forecasting.
-
-Common Causes of Endogeneity in Time Series:
-
-* Simultaneity: Variables mutually affect each other (e.g., supply and demand).
-* Omitted Variables: Missing relevant factors that influence both the dependent variable and the regressors.
-* Measurement Errors: Errors in measuring explanatory variables lead to endogeneity.
 
 ## Vector Autoregression (VAR)
 
@@ -96,44 +117,161 @@ where:
 - $Y_t$ is a vector of endogenous variables at time $t$,
 - $A_i$ are coefficient matrices (each of size $k \times k$),
 - $p$ is the lag order,
-- $\varepsilon_t$ is a vector of error terms (with mean zero and covariance matrix $\Sigma$).
+- $\varepsilon_t$ is a vector of error terms (mean zero, covariance $\Sigma$).
 
 
 ## Vector Autoregression (VAR)
 
-In matrix form, the VAR($p$) model is represented as:
+In matrix form, the VAR($p$) model is written as:
   
 $$
-  \Phi(L) Y_t = \varepsilon_t
+  \Phi(B) Y_t = \varepsilon_t
 $$
 
 where:
 
-- $Y_t$ is a $k \times 1$ vector of endogenous variables $Y_t = \begin{pmatrix} y_{1t} \\ y_{2t} \\ \vdots \\ y_{kt} \end{pmatrix}$,
-- $\Phi(L)$ is a matrix polynomial of AR coefficients in the lag operator $L$
-- $\varepsilon_t$ is a $k \times 1$ vector of error terms (white noise), $\varepsilon_t = \begin{pmatrix} \varepsilon_{1t} \\ \varepsilon_{2t} \\ \vdots \\ \varepsilon_{kt} \end{pmatrix}$.
+- $Y_t$ is a $k \times 1$ vector of endogenous variables,
+- $\Phi(B)$ is a matrix polynomial of AR coefficients,
+- $\varepsilon_t$ is a $k \times 1$ vector of error terms (white noise).
 
 <!-- About 20 minutes -->
 
 ## Vector Autoregression (VAR)
 
-TODO:
+VAR (Vector Autoregression) models handle endogeneity by treating all variables in the system as endogenous.
 
-* Multivariate forecasting:
-  * Demonstrate model estimation
-  * Show forecasts
-* Granger Causality:
-  * Concept and how it's tested in VAR.
-  * Provide an example of testing Granger causality between two series.
-* Impulse Response Functions (IRFs):
-  * Explain the concept of IRFs and how they reveal the response of one variable to shocks in another.
-  * Show an example using IRFs in a VAR setting.
+. . .
+
+\fontsize{11}{12}\sf
+```{r}
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(var = VAR(vars(Imports, Exports)))
+```
+
+\fontsize{16}{16}\sf
+
+Use `VAR()` to specify a model, specifying all response variables in the model with `vars()`.
+
+
+## Vector Autoregression (VAR)
+
+\fontsize{10}{10}\sf
+```{r}
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(var = VAR(vars(Imports, Exports))) |> 
+  report()
+```
+
+## Vector Autoregression (VAR)
+
+Forecasts from VAR models are multivariate normal.
+
+
+\fontsize{10}{10}\sf
+```{r}
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(var = VAR(vars(Imports, Exports))) |> 
+  forecast(h = "10 years")
+```
+
+
+## Vector Autoregression (VAR)
+
+Plotting multivariate forecasts shows intervals from marginal forecast distributions.
+
+```{r}
+#| fig-height: 2
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(var = VAR(vars(Imports, Exports))) |> 
+  forecast(h = "10 years") |> 
+  autoplot(global_economy)
+```
+
+
+## Impulse Response Functions
+
+Impulse Response Functions (IRFs) reveal the response of one variable to shocks in another.
+
+\fontsize{10}{10}\sf
+```{r}
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(var = VAR(vars(Imports, Exports))) |> 
+  IRF(h = 10, impulse = "Imports")
+```
+
+
+## Impulse Response Functions
+
+They can be plotted using `gg_irf()`
+
+```{r}
+#| fig-height: 2.5
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(var = VAR(vars(Imports, Exports))) |> 
+  IRF(h = 10, impulse = "Imports") |> 
+  gg_irf()
+```
+
 
 # Vector Error Correction Models (VECM)
 
+## Cointegration
+
+::: {.callout-note}
+## Definition
+
+Cointegration is when two or more non-stationary time series, each integrated of the same order, are linked by a long-term equilibrium relationship.
+:::
+
+For example: If $x$ and $y$ are non-stationary ($I(1)$), and a linear combination of them is stationary ($I(0)$), then $x$ and $y$ are cointegrated.
+
+## Cointegration
+
+Is Australian imports and exports cointegrated?
+
+```{r}
+#| fig-height: 3
+global_economy |> 
+  filter(Country == "Australia") |> 
+  autoplot(vars(Imports, Exports)) 
+```
+
+
+## Cointegration
+
+Yes, both are non-stationary but their difference is stationary.
+
+```{r}
+#| fig-height: 3
+global_economy |> 
+  filter(Country == "Australia") |> 
+  autoplot(Imports - Exports) 
+```
+
+## The Johansen test
+
+The Johansen test helps to determine how many long-term equilibrium (cointegrating) relationships exist between the variables.
+
+\fontsize{10}{10}\sf
+```{r}
+aus_economy <- global_economy |>
+  filter(Country == "Australia")
+aus_economy |>
+  with(cointegration_johansen(cbind(Imports, Exports)))
+```
+
+
 ## Vector Error Correction Models (VECM)
 
-The VECM is used when variables are cointegrated. The form of a VECM for $Y_t$ is:
+The VECM is used when variables are cointegrated. 
+
+The form of a VECM for $Y_t$ is:
 
 $$
   \Delta Y_t = \Pi Y_{t-1} + \sum_{i=1}^{p-1} \Gamma_i \Delta Y_{t-i} + \varepsilon_t
@@ -142,61 +280,151 @@ $$
 where:
 
 - $\Delta Y_t = Y_t - Y_{t-1}$ is the first difference of $Y_t$,
-- $\Pi$ is the cointegration matrix ($\Pi = \alpha \beta'$, where $\alpha$ are adjustment coefficients and $\beta$ are cointegration vectors),
+- $\Pi$ is the cointegration matrix (long-run coefficients)
 - $\Gamma_i$ are short-run adjustment coefficients,
 - $\varepsilon_t$ is the error term.
 
-
-## Cointegration
-
-Definition: Cointegration occurs when two or more non-stationary time series, each integrated of the same order, are linked by a long-term equilibrium relationship.
-
-For example: If $x$ and $y$ are non-stationary, and a linear combination of them is stationary, then $x$ and $y$ are cointegrated.
-
-## The Johansen test
-
-The Johansen test helps to determine how many long-term equilibrium relationships exist between the variables, guiding model specification.
-
-
 ## Estimating a VECM
 
-TODO:
+\fontsize{10}{10}\sf
+```{r vecm}
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(vecm = VECM(vars(Imports, Exports) ~ 1 + AR(p = 1), r = 1)) |> 
+  report()
+```
 
-* Explain the link between cointegration and VECM, and between VECM and VAR.
-* Discuss long-term equilibrium relationships and short-term dynamics.
-* Provide an example of a VECM model and interpretation of error correction terms.
+\fontsize{16}{16}\sf
+
+Use `VECM()` to specify a model, with the number of cointegrating relationships for `r`.
+
+## Forecasting a VECM
+
+\fontsize{11}{12}\sf
+```{r vecm-fc}
+#| fig-height: 3.5
+global_economy |> 
+  filter(Country == "Australia") |> 
+  model(vecm = VECM(vars(Imports, Exports) ~ 1 + AR(p = 1), r = 1)) |> 
+  forecast(h = "10 years") |> 
+  autoplot(global_economy)
+```
 
 # VARIMA Models
 
 ## VARIMA Models
 
-The VARIMA model extends an ARIMA model to multiple time series. 
-
-It combines autoregression (AR), differencing (I), and moving average (MA) components:
+The VARIMA model extends an ARIMA model to capture relationships between multiple time series.
   
 $$
-  \Phi(L) \Delta^d Y_t = \Theta(L) \varepsilon_t
+  \Phi(B) \Delta^d Y_t = \Theta(B) \varepsilon_t
 $$
 
 where:
 
-- $\Phi(L)$ is the matrix polynomial in the lag operator $L$ for the AR part,
-- $\Delta^d Y_t$ is the differenced series ($d$ is the order of integration),
-- $\Theta(L)$ is the matrix polynomial in the lag operator $L$ for the MA part,
+- $\Phi(B)$ is the matrix polynomial for the AR part,
+- $\Delta^d Y_t$ is the differenced series,
+- $\Theta(B)$ is the matrix polynomial for the MA part,
 - $\varepsilon_t$ is the error term. 
-
-In the VARIMA model, both autoregressive and moving average terms are allowed across multiple time series.
 
 ## VARIMA Models
 
-TODO:
+VARIMA models are useful for modelling multiple related non-stationary time series which are **not** cointegrated.
 
-* Introduction to VARIMA:
-   * Discuss the role of differencing for non-stationary data.
-* Modelling Process:
-  * Model selection for VARIMA
-  * Briefly compare it to VAR and VECM in terms of applicability.
+. . .
 
+::: {.callout-tip}
+## Handling non-stationarity
+
+Much like ARIMA, we use transformations and differences to make non-stationary variables stationary.
+
+:::
+
+## Identifying VARIMA models
+
+VARIMA models can be statistically difficult to estimate.
+
+This is because their coefficients aren't always uniquely identified.
+
+. . .
+
+::: {.callout-important}
+
+## Constraints for identification
+
+We must force some coefficients to zero (usually MA coefficients) to ensure identification.
+
+Identification of VARIMA models is often achieved with estimation using Kronecker indices or scalar components.
+
+:::
+
+## Estimating VARIMA models
+
+Much like `ARIMA()`, we use `VARIMA()` and `pdq()` to specify a VARIMA model.
+
+\fontsize{10}{10}\sf
+```{r}
+aus_economy |> 
+  filter(!is.na(Growth)) |> 
+  model(varima = VARIMA(vars(Growth, Imports))) |> 
+  report()
+```
+
+
+## Forecasting VARIMA models
+
+```{r}
+#| fig-height: 3
+aus_economy |> 
+  filter(!is.na(Growth)) |> 
+  model(varima = VARIMA(vars(Growth, Imports))) |> 
+  forecast(h = "10 years") |> 
+  autoplot(aus_economy)
+```
+
+# Lab Session 18
+
+## Lab Session 18
+
+Consider multivariate modelling of education staff affiliation.
+
+```{r}
+staff_affiliation <- staff |> 
+  group_by(`Affiliation 2`) |> 
+  summarise(Count = sum(`In-School Staff Count`)) |> 
+  pivot_wider(names_from = `Affiliation 2`, values_from = Count)
+```
+
+1. Which model (VAR, VECM, or VARIMA) is most appropriate for this data?
+
+2. Estimate a suitable multivariate model for this relationship.
+
+```{r}
+#| include: false
+staff_affiliation |> 
+  model(VECM(vars(Catholic, Government, Independent) ~ AR(1), r = 2))
+```
+
+
+3. Compute and visualise the impulse response functions.
+
+```{r}
+#| include: false
+staff_affiliation |> 
+  model(VECM(vars(Catholic, Government, Independent) ~ AR(1), r = 2)) |> 
+  IRF(impulse = "Independent") |> 
+  gg_irf()
+```
+
+4. Produce and visualise forecasts from the model.
+
+```{r}
+#| include: false
+staff_affiliation |> 
+  model(VECM(vars(Catholic, Government, Independent) ~ AR(1), r = 2)) |> 
+  forecast(h = "10 years") |> 
+  autoplot(staff_affiliation)
+```
 
 # Forecast reconciliation
 
@@ -314,8 +542,8 @@ A \alert{\textbf{grouped time series}} is a collection of time series that can b
 ```{r tourism_aggregate}
 tourism |>
   aggregate_key(Purpose * (State / Region), Trips = sum(Trips)) |>
-  filter(Quarter == yearquarter("1998 Q1")) |>
-  print(n = 15)
+  arrange(Quarter) |> 
+  print(n=20)
 ```
 
 ## Creating aggregates
@@ -439,7 +667,23 @@ for some matrix $\bm{G}$.
  * $\bm{G}$ extracts and combines base forecasts $\hat{\by}_{n}(h)$ to get bottom-level forecasts.
  * $\bS$ adds them up
 
-# Optimal combination forecasts
+# Forecast combination techniques
+
+## Simple combination forecasts
+
+There are several ways to adjust forecasts to be coherent.
+
+* `bottom_up()`
+
+  Simply aggregate the most disaggregated forecasts
+
+* `top_down()`
+
+  Disaggregate the top level forecast
+  
+* `middle_out()`
+
+  Find a middle level of disaggregation, applying both bottom up and top down techniques.
 
 ## Optimal combination forecasts
 \fontsize{13}{14}\sf
@@ -483,7 +727,7 @@ tourism_agg <- tourism |>
     Trips = sum(Trips)
   )
 fc <- tourism_agg |>
-  filter_index(. ~ "2015 Q4") |>
+  filter(Quarter < yearquarter("2016 Q1")) |> 
   model(ets = ETS(Trips)) |>
   reconcile(ets_adjusted = min_trace(ets)) |>
   forecast(h = "2 years")
@@ -494,6 +738,53 @@ fc <- tourism_agg |>
 
 ```{r fctourism2, dependson='fctourism'}
 fc |>
-  filter(is_aggregated(Purpose) & is_aggregated(State)) |>
+  filter(is_aggregated(Purpose), Region == "Sydney") |>
   autoplot(tourism_agg, level = 95)
 ```
+
+
+## Example: Australian tourism
+\fontsize{10}{11}\sf
+
+```{r fctourism3, dependson='fctourism'}
+fc |>
+  accuracy(tourism_agg) |> 
+  group_by(.model) |> 
+  summarise(across(where(is.numeric), mean))
+```
+
+# Lab Session 19
+
+## Lab Session 19
+
+Produce coherent forecasts of the total number of students.
+
+1. Produce aggregates of `students` by `State/Territory`, `Affiliation (Gov/Cath/Ind)` and `School Level`.
+
+2. Estimate automatic ETS models on data before 2020.
+
+3. Use optimal forecast reconciliation for these models.
+
+4. Produce and plot 4 years of coherent and base forecasts.
+
+5. Evaluate the test-set accuracy of these forecasts Are the coherent forecasts more accurate?
+
+```{r}
+#| include: false
+#| eval: false
+students_agg <- students |> 
+  aggregate_key(
+    `State/Territory` * `Affiliation (Gov/Cath/Ind)` * `School Level`,
+    Students = sum(`All Full-time and Part-time Student count`)
+  )
+students_agg |> 
+  filter(Year < 2020) |> 
+  model(ets = ETS(Students)) |> 
+  reconcile(min_trace(ets)) |> 
+  forecast(h = 4) |> 
+  accuracy(students_agg) |> 
+  group_by(.model) |> 
+  summarise(across(where(is.numeric), mean))
+```
+
+

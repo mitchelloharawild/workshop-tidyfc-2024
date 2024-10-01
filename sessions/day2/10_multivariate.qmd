@@ -12,3 +12,37 @@ image: "john-barkiple-l090uFWoPaI-unsplash.jpg"
 ```
 
 [View slides in full screen](../../materials/11_multivariate.pdf)
+
+### Lab Session 18
+
+Consider multivariate modelling of education staff affiliation.
+
+```{r}
+#| eval: false
+staff_affiliation <- staff |> 
+  group_by(`Affiliation 2`) |> 
+  summarise(Count = sum(`In-School Staff Count`)) |> 
+  pivot_wider(names_from = `Affiliation 2`, values_from = Count)
+```
+
+1. Which model (VAR, VECM, or VARIMA) is most appropriate for this data?
+
+2. Estimate a suitable multivariate model for this relationship.
+
+3. Compute and visualise the impulse response functions.
+
+4. Produce and visualise forecasts from the model.
+
+### Lab Session 19
+
+Produce coherent forecasts of the total number of students.
+
+1. Produce aggregates of `students` by `State/Territory`, `Affiliation (Gov/Cath/Ind)` and `School Level`.
+
+2. Estimate automatic ETS models on data before 2020.
+
+3. Use optimal forecast reconciliation for these models.
+
+4. Produce and plot 4 years of coherent and base forecasts.
+
+5. Evaluate the test-set accuracy of these forecasts Are the coherent forecasts more accurate?

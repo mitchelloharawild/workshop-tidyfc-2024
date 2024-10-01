@@ -105,6 +105,31 @@ gridExtra::grid.arrange(p1, p2, nrow = 1)
 
 * Cyclic behaviour is possible when $p\ge 2$.
 
+
+## Autoregressive models
+
+\begin{block}{Autoregressive (AR) models:}\vspace*{-0.3cm}
+$$
+  y_{t} = c + \phi_{1}y_{t - 1} + \phi_{2}y_{t - 2} + \cdots + \phi_{p}y_{t - p} + \varepsilon_{t},
+$$
+where $\varepsilon_t$ is white noise. A multiple regression with \textbf{lagged values} of $y_t$ as predictors.
+\end{block}
+
+```{r arp-pacf, echo=FALSE, fig.height=2.3}
+set.seed(1)
+p1 <- tsibble(idx = seq_len(100), sim = 10 + arima.sim(list(ar = -0.8), n = 100), index = idx) |>
+  PACF(sim) |> 
+  autoplot() + labs(title = "AR(1)")
+p2 <- tsibble(idx = seq_len(100), sim = 20 + arima.sim(list(ar = c(1.3, -0.7)), n = 100), index = idx) |>
+  PACF(sim) |> 
+  autoplot() + labs(title = "AR(2)")
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+```
+
+\vspace*{-0.4cm}
+
+* Cyclic behaviour is possible when $p\ge 2$.
+
 ## Moving Average (MA) models
 
 \begin{block}{Moving Average (MA) models:}\vspace*{-0.3cm}
@@ -121,6 +146,29 @@ p1 <- tsibble(idx = seq_len(100), sim = 20 + arima.sim(list(ma = 0.8), n = 100),
   autoplot(sim) + labs(x = "time", y = "", title = "MA(1)")
 p2 <- tsibble(idx = seq_len(100), sim = arima.sim(list(ma = c(-1, +0.8)), n = 100), index = idx) |>
   autoplot(sim) + labs(x = "time", y = "", title = "MA(2)")
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+```
+
+
+## Moving Average (MA) models
+
+\begin{block}{Moving Average (MA) models:}\vspace*{-0.3cm}
+$$
+  y_{t} = c + \varepsilon_t + \theta_{1}\varepsilon_{t - 1} + \theta_{2}\varepsilon_{t - 2} + \cdots + \theta_{q}\varepsilon_{t - q},
+$$
+where $\varepsilon_t$ is white noise.
+A multiple regression with \textbf{lagged \emph{errors}} as predictors. \emph{Don't confuse with moving average smoothing!}
+\end{block}
+
+```{r maq-acf, fig.height=2.3, echo=FALSE}
+set.seed(2)
+p1 <- tsibble(idx = seq_len(100), sim = 20 + arima.sim(list(ma = 0.8), n = 100), index = idx) |>
+  ACF(sim) |> 
+  autoplot() + labs(title = "MA(1)")
+p2 <- tsibble(idx = seq_len(100), sim = arima.sim(list(ma = c(-1, +0.8)), n = 100), index = idx) |>
+  ACF(sim) |> 
+  autoplot() + labs(title = "MA(2)")
 
 gridExtra::grid.arrange(p1, p2, nrow = 1)
 ```
@@ -559,7 +607,7 @@ youth_learning |>
 ```
 
 
-# Forecast ensembles
+# ARIMA vs ETS
 
 ## Is ARIMA or ETS best?
 
@@ -591,6 +639,8 @@ We can determine which model works best on a specific dataset using accuracy eva
 . . .
 
 Or, combine them with ensembles!
+
+# Forecast ensembles
 
 ## Forecast ensembles
 \fontsize{10}{11}\sf

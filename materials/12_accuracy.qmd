@@ -233,6 +233,8 @@ augment(fit) |> features(.resid, ljung_box, lag = 10)
 
   * Compute RW w/ drift forecasts for total student enrolments in Australia (`students`).
 
+  * Check the residuals. Is $\varepsilon_t \stackrel{iid}{\sim} N(0,\sigma^2)$?
+
   * Test if the residuals are white noise. What do you conclude?
 
 # Forecast accuracy measures

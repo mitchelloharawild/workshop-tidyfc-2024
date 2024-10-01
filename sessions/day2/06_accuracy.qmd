@@ -18,6 +18,7 @@ image: "balint-mendlik-4-ORHffEh3I-unsplash.jpg"
 ### Lab Session 10
 
   * Use RW w/ drift to model total student enrolments in Australia (`students`).
+  * Check the residuals, is $\varepsilon_t \stackrel{iid}{\sim} N(0,\sigma^2)$?
   * Test if the residuals are white noise. What do you conclude?
 
 ### Lab Session 11
