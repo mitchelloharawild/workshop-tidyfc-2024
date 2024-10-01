@@ -8,6 +8,6 @@ withr::with_dir(
   "exercises",
   zip(
     "../labs.zip",
-    list.files(".", full.names = TRUE, recursive = TRUE)
+    c(".Rprofile", list.files(".", full.names = TRUE, recursive = TRUE))
   )
 )
