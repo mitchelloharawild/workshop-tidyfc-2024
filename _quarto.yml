@@ -44,6 +44,8 @@ website:
         menu: 
           - text: Day 1
             href: 'labs/day1.R'
+          - text: Day 2
+            href: 'labs/day2.R'
       - icon: download
         text: Downloads
         menu: 
