@@ -11,7 +11,7 @@ image: "balint-mendlik-4-ORHffEh3I-unsplash.jpg"
 <embed src="../../materials/12_accuracy.pdf" type="application/pdf" width="750px" height="420px">
 ```
 
-[View slides in full screen](../../materials/07_ets.pdf)
+[View slides in full screen](../../materials/12_accuracy.pdf)
 
 ## Lab sessions
 

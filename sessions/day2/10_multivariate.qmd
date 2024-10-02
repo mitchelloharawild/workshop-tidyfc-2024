@@ -8,7 +8,7 @@ image: "john-barkiple-l090uFWoPaI-unsplash.jpg"
 <!-- Materials will be distributed sooner to the event. -->
 
 ```{=html}
-<embed src="../../materials/10_hierarchical.pdf" type="application/pdf" width="750px" height="420px">
+<embed src="../../materials/11_multivariate.pdf" type="application/pdf" width="750px" height="420px">
 ```
 
 [View slides in full screen](../../materials/11_multivariate.pdf)
